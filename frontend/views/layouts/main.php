@@ -30,36 +30,7 @@ AppAsset::register($this);
 
 <div class="wrap">
   <div class="container-fluid menushadow ">
-			<div class="container">
-				<div class="row menu-container align-items-center">
-					<div class="col-md-5 header-text-color">
-						<h4>KAFE DISTRICT MARKET</h4>
-					</div>
-					<div class="col-md-7 ">
-						 <ul class="nav justify-content-end">
-							<li class="nav-item">
-								<a class="nav-link header-text-color" href="<?= Url::to(['site/dashboard'])?>">Dashboard</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link header-text-color" href="#">Settings</a>
-							</li>
-							<li class="nav-item">
-								<?= Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout nav-link header-text-color']
-            )
-            . Html::endForm();
-								?>
-								
-							</li>
-							
-							</ul> 
-					</div>
-				</div>
-				
-			</div>
-		  
+			
 		</div> 
 		
 <!--		add a notification div here-->
