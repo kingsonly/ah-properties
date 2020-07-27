@@ -42,7 +42,7 @@ class SignupForm extends Model
      *
      * @return bool whether the creating new account was successful and email was sent
      */
-    public function signup()
+    public function signup($role)
     {
         if (!$this->validate()) {
             return null;
@@ -55,6 +55,10 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
         if($user->save() && $this->sendEmail($user)){
+            
+            $auth = \Yii::$app->authManager;
+            $authorRole = $auth->getRole($role);
+            $auth->assign($authorRole, $user->getId());
             return $user->id;
         }
 

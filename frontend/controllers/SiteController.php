@@ -190,18 +190,18 @@ class SiteController extends Controller
         
         $role = [
             [
-                'id' => 'Editor',
-                'name' => 'Editor',
+                'id' => 'author',
+                'name' => 'Author',
             ],
             [
-                'id' => 'Admin',
+                'id' => 'admin',
                 'name' => 'Admin',
             ]
         ];
 
         if ($model->load(Yii::$app->request->post()) && $staff_model->load(Yii::$app->request->post())) {
-            //return var_dump(Yii::$app->request->post());
-            $user_id = $model->signup();
+            //return var_dump(Yii::$app->request->post('KdmStaff')['position']);
+            $user_id = $model->signup(Yii::$app->request->post('KdmStaff')['position']);
             if(!empty($user_id)){
                 $staff_model->staff_user_id = $user_id;
                 if($staff_model->save()){

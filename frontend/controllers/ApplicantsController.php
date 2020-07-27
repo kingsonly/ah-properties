@@ -142,8 +142,7 @@ class ApplicantsController extends Controller
 	
 	public function actionView($id)
     {
-		
-		$this->layout = 'preview';
+            $this->layout = 'preview';
 		$modelBio = KdmApplicantBioData::find()->andWhere(['id' => $id])->one();
 		
 		$modelKdmContactDetails = KdmContactDetails::find()->andWhere(['applicant_id' => $modelBio->applicant_id])->one();
@@ -168,6 +167,8 @@ class ApplicantsController extends Controller
 			'modelKdmUser' => $modelKdmUser,
                 
             ]);
+		
+		
 		
 		
     }
@@ -544,6 +545,15 @@ class ApplicantsController extends Controller
 			}
             
         }
+    }
+    
+    public function actionUpdate(){
+         if (\Yii::$app->user->can('deletePost')) {
+             return 12345;
+         } else {
+             return 'sorry you dont have the permission to update post';
+         }
+        
     }
 
    
