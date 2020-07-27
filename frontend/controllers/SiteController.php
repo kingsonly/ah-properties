@@ -14,6 +14,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\KdmStaff;
 
 /**
  * Site controller
@@ -28,15 +29,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'signup'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -45,7 +41,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    //'logout' => ['post'],
                 ],
             ],
         ];
@@ -137,13 +133,93 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-            return $this->goHome();
+        $staff_model = new KdmStaff();
+        $gender =[
+            [
+            'id' =>'Male',
+            'name' =>'Male',
+            ],
+            [
+            'id' =>'Female',
+            'name' =>'Female',
+            ]
+        ];
+        $marriage =[
+            [
+            'id' =>'Single',
+            'name' =>'Single',
+            ],
+            [
+            'id' =>'Married',
+            'name' =>'Married',
+            ],
+            [
+            'id' =>'Separated',
+            'name' =>'Separated',
+            ],
+            [
+            'id' =>'Separated',
+            'name' =>'Separated',
+            ],
+
+            [
+            'id' =>'Divorced',
+            'name' =>'Divorced',
+            ],
+            [
+            'id' =>'Widowed',
+            'name' =>'Widowed',
+            ],
+        ];
+
+        $edu =[
+            [
+            'id' =>'Primary',
+            'name' =>'Primary',
+            ],
+            [
+            'id' =>'Secondary',
+            'name' =>'Secondary',
+            ],
+            [
+            'id' =>'Tertiary',
+            'name' =>'Tertiary',
+            ],
+
+        ];
+        
+        $role = [
+            [
+                'id' => 'author',
+                'name' => 'Author',
+            ],
+            [
+                'id' => 'admin',
+                'name' => 'Admin',
+            ]
+        ];
+
+        if ($model->load(Yii::$app->request->post()) && $staff_model->load(Yii::$app->request->post())) {
+            //return var_dump(Yii::$app->request->post('KdmStaff')['position']);
+            $user_id = $model->signup(Yii::$app->request->post('KdmStaff')['position']);
+            if(!empty($user_id)){
+                $staff_model->staff_user_id = $user_id;
+                if($staff_model->save()){
+                    Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+                    return $this->goHome();
+                }
+                
+            }
+            
         }
 
         return $this->render('signup', [
             'model' => $model,
+            'staff_model' => $staff_model,
+            'gender' => $gender,
+            'edu' => $edu,
+            'marriage' => $marriage,
+            'role' => $role
         ]);
     }
 

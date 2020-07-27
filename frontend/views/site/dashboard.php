@@ -131,7 +131,9 @@ use yii\helpers\Url;
                                     </li>
                                     
                                     <li>
+                                        <a href="<?= Url::to(['site/signup'])?>">
                                         <button type="button" class="btn btn-primary m fas fa-plus-circle g">Add New</button>
+                                        </a>
                                     </li>
                                          
                                     <li>

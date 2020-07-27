@@ -13,6 +13,8 @@ class LoginAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        'css/style.css',
+        'css/responsive.css',
     ];
     public $js = [
     ];

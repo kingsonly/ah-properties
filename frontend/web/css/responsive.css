@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.box {
+    width: 100%;
+}
+
+@media screen and (min-width: 600px) {
+    .welcome-banner,
+    .welcome-form {
+        width: 50%;
+        height: 100%;
+    }
+    .welcome-banner {
+        background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7)), url(https://img.etimg.com/thumb/width-640,height-480,imgsize-106734,resizemode-1,msid-62552254/news/international/world-news/contract-signed-for-work-on-worlds-tallest-skyscraper-in-jeddah/skyscrapper.jpg);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        align-items: unset;
+        justify-content: unset;
+    }
+    #title {
+        position: relative;
+        top: 70%;
+        width: 260px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    a {
+        font-size: 0.65rem;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #1d90e2;
+    }
+    #form-content {
+        max-width: 400px;
+    }
+    a {
+        font-size: 0.6rem;
+    }
+}
