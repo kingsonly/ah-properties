@@ -318,17 +318,15 @@ class ApplicantsController extends Controller
 	
 	public function actionView($id)
     {
-<<<<<<< HEAD
+
 		
 		$this->layout = 'preview';
 		$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$id])->one();
 		$modelKdmDocumentUpload = KdmDocumentUpload::find()->andWhere(['applicant_id' => $id])->all();
 		
 		$modelKdmPayment = KdmPayment::find()->andWhere(['applicant_id' => $id])->all();
-=======
-            $this->layout = 'preview';
-		$modelBio = KdmApplicantBioData::find()->andWhere(['id' => $id])->one();
->>>>>>> 8f44aa4aaaf63afdd8804f41f979612fd0fdafa6
+
+      
 		
 		$modelKdmApplicantAgent = KdmApplicantAgent::find()->andWhere(['applicant_id' => $id])->one();
 		
@@ -912,7 +910,6 @@ class ApplicantsController extends Controller
             
         }
     }
-<<<<<<< HEAD
 	
 	
 	public function actionProcessorganizationdocumentformmemorandum()
@@ -1500,7 +1497,7 @@ class ApplicantsController extends Controller
         
     }
 	
-=======
+
     
     public function actionUpdate(){
          if (\Yii::$app->user->can('deletePost')) {
@@ -1510,7 +1507,7 @@ class ApplicantsController extends Controller
          }
         
     }
->>>>>>> 8f44aa4aaaf63afdd8804f41f979612fd0fdafa6
+
 
    
 }
