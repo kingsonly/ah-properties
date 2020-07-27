@@ -10,32 +10,43 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    .control-label{
+        font-size: 14px !important;
+    }
+</style>
 <div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div style="color:#999;margin:1em 0">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                    <br>
-                    Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?>
-                </div>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
+   
+     <div class="container">
+        <div class="box welcome-banner">
+            <p id="title">KAFE DISTRICT MARKET</p>
         </div>
-    </div>
+
+
+        <div class="box welcome-form">
+            <div id="form-content">
+                <h2>Welcome</h2>
+                <h5>Enter your log in details</h5>
+                
+                <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                    <div>
+                        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+            
+                    </div>
+
+                    <div>
+                        <?= $form->field($model, 'password')->passwordInput() ?>
+                    </div>
+
+                    <?= Html::a('Forgot password', ['site/request-password-reset']) ?>"
+
+                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <a href="https://yisola.github.io/kafe-district-market/page3.html">ADD NEW STAFF</a>
+
+                 <?php ActiveForm::end(); ?>
+            </div>
+        </div>
+
+
+</div>
 </div>
