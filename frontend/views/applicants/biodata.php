@@ -4,6 +4,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use frontend\models\KdmState;
+use yii\bootstrap4\Modal;
+use kartikorm\ActiveForm as activeform2;
+use kartik\date\DatePicker;
+use kartik\depdrop\DepDrop;
 $titles =[
 	[
 	'id' =>'Mr',
@@ -76,7 +80,7 @@ $edu =[
 
 $country =[
 	[
-	'id' =>'Nigeria',
+	'id' =>'160',
 	'name' =>'Nigeria',
 	],
 	
@@ -87,7 +91,7 @@ $state = [];
 
 foreach($dbState as $key => $value){
 	array_push($state,[
-	'id' =>$value->name,
+	'id' =>$value->id,
 	'name' =>$value->name,
 	]);
 }
@@ -101,6 +105,7 @@ foreach($dbState as $key => $value){
 										<div class="form-group" style="width:60%">
 											
 											<?= $form->field($model, 'title')->dropDownList(ArrayHelper::map($titles, 'id', 'name'),['class'=>'custom-select']) ?>
+											<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel])->label(false); ?>
 										</div>
 									</div>
 									<div class="col-md-9">
@@ -155,8 +160,16 @@ foreach($dbState as $key => $value){
 								<div class="row">
 									<div class="col-md-3">
 										<div class="form-group">
-														<?= $form->field($model, 'date_of_birth')->textInput(['id' => 'dob']); ?>
-										  </div>
+														
+											
+											<? echo $form->field($model, 'date_of_birth')->widget(DatePicker::classname(), [
+											'options' => ['placeholder' => 'Enter birth date ...'],
+											'pluginOptions' => [
+												'autoclose'=>true,
+												'format' => 'yyyy-mm-dd'
+											]
+										]);?>
+																				  </div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
@@ -177,14 +190,21 @@ foreach($dbState as $key => $value){
 										</div>
                                     
                                     <div class="form-group m" style="width:20%">
-											<?= $form->field($model, 'state_of_origin')->dropDownList(ArrayHelper::map($state, 'id', 'name'),['class'=>'custom-select']) ?>
+											<?= $form->field($model, 'state_of_origin')->dropDownList(ArrayHelper::map($state, 'id', 'name'),['class'=>'custom-select','id' => 'state']) ?>
 										</div>
                                     
                                     
 								  		 <div class="form-group m" style="width:20%">
 											
-											 <?= $form->field($model, 'local_government_of_origin')->textInput(['id' => 'local_government'])->label('
-Local Government'); ?>
+											
+											 <? echo $form->field($model, 'local_government_of_origin')->widget(DepDrop::classname(), [
+											 'options' => ['id'=>'lga'],
+											 'pluginOptions'=>[
+												 'depends'=>['state'],
+												 'placeholder' => 'Select...',
+												 'url' => Url::to(['/applicants/localgov'])
+											 ]
+										 ]); ?>
 										</div>
 								  		
 										
@@ -213,7 +233,7 @@ Local Government'); ?>
 										<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 									</div>
 									<div class="col-md-5">
-										<?= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
+										<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 									</div>
 									<div class="col-md-2"></div>
 								</div>
@@ -258,9 +278,9 @@ Local Government'); ?>
         success: function (data) {
         	newData = data.data
 			if(data.status == 1){
-				$(document).find('#renderapplicationform').load('$contactDetails'+'&id='+newData.id);
+				$(document).find('#renderapplicationform').load('$contactDetails'+'&id='+newData.applicant_id);
 				$(document).find('.list-group-item').removeClass('active');
-				$(document).find('#contactactive').addClass('active');
+				$(document).find('#contactdetails').addClass('active')
 				toastr.success('Bio Data  Saved')
 	
 			}else{

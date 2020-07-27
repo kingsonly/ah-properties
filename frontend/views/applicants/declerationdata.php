@@ -11,8 +11,11 @@ $titles =[
 ];
 ?>
 <style>
-	
+	.custom-control-input{
+		opacity: 1 !important;
+	}
 </style>
+<? if($rootModel->applicant_type == 1){ ?>
 <div class="container">
 <!--							form content goes here-->
 							 <div class="row">
@@ -59,6 +62,7 @@ $titles =[
 							
 							
 						</div> 
+<? }?>
 						
 						<div class="container content-form-area">
 <!--							form content goes here-->
@@ -76,8 +80,13 @@ $titles =[
 														<div class="col-md-1">
 															<div class="form-group">
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" class="custom-control-input" id="customCheck" name="example1">
-																	<label class="custom-control-label" for="customCheck"></label>
+																	<?= $form->field($declarationModel, "declaration")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => '','id' => 'customCheck']); ?>
+																	
+																	<?= $form->field($declarationModel, 'applicant_id')->hiddenInput(['value' => $rootModel->id])->label(false); ?>
+																	
+																	<?= $form->field($declarationModel, 'status')->hiddenInput(['value' => 1])->label(false); ?>
+																	
+																	
 															  	</div>
 														    </div>
 														</div>
@@ -114,7 +123,7 @@ $titles =[
 												<div class="row">
 														<div class="col-md-7">
 															<div class="form-group">
-																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $bioData->applicant_id])->label(false); ?>
+																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel->id])->label(false); ?>
 																
 																<?= $form->field($model, 'document_type')->hiddenInput(['value' => 'Signature'])->label(false); ?>
 																
@@ -144,7 +153,7 @@ $titles =[
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 												</div>
 												<div class="col-md-5">
-													<?= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
+													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
 												<div class="col-md-2"></div>
 													</div>

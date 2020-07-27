@@ -69,6 +69,11 @@ use yii\widgets\ActiveForm;
 													<? if($allValue->status == 2){?>
 													<button class="btn btn-warning">Pending</button>
 													<? }?>
+													
+													<? if($allValue->status < 2){?>
+													<button class="btn btn-info">Incomplete</button>
+													<? }?>
+													
 													<? if($allValue->status == 3){?>
 													<button class="btn btn-success">Approved</button>
 													<? }?>
@@ -78,8 +83,24 @@ use yii\widgets\ActiveForm;
 													<? }?>
 													
 												</td>
-												<td><?= $allValue->applicant_id;?></td>
-												<td><?= $allValue->last_name.' '.$allValue->first_name.' '.$allValue->middle_name?></td>
+												<td>
+													<?
+													foreach($allValue->filenumber as $fileNumber){
+														echo $fileNumber->file_number.'<br>';
+													}
+													?>
+												</td>
+												<td>
+													<? if($allValue->stage_status > 2){ ?>
+													<? if($allValue->applicant_type == 1){ 
+															echo $allValue->individual->last_name.' '.$allValue->individual->first_name.' '.$allValue->individual->middle_name;
+														}else{
+															echo $allValue->organization->organization_name;
+														} }else{
+														echo 'no name';
+													}?>
+													
+												</td>
 												<td >
 													<a href="<?= Url::to(['applicants/view','id' => $allValue->id])?>"> View</a>
 													|
@@ -88,7 +109,8 @@ use yii\widgets\ActiveForm;
 												</td>
 												<td>
 													<? if($allValue->status == 2){?>
-													<button class="btn btn-primary">Start Verification</button>
+													<a href="<?= Url::to(['applicants/statverification','id'=>$allValue->id]);?>"><button class="btn btn-primary">Start Verification</button>
+														</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
 													<button class="btn btn-success">Assing A Space</button>
@@ -138,12 +160,32 @@ use yii\widgets\ActiveForm;
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-danger">Declined</button>
+													<? if($allValue->status < 2){?>
+													<button class="btn btn-info">Incomplete</button>
+													<? }?>
 													
 													<? }?>
 													
 												</td>
-												<td><?= $allValue->applicant_id;?></td>
-												<td><?= $allValue->last_name.' '.$allValue->first_name.' '.$allValue->middle_name?></td>
+												<td>
+													<?
+													foreach($allValue->filenumber as $fileNumber){
+														echo $fileNumber->file_number.'<br>';
+													}
+													?>
+												</td>
+												<td>
+													<? if($allValue->stage_status > 2){ ?>
+													<? if($allValue->applicant_type == 1){ 
+															echo $allValue->individual->last_name.' '.$allValue->individual->first_name.' '.$allValue->individual->middle_name;
+														}else{
+															echo $allValue->organization->organization_name;
+														} ?>
+													<?}else{
+														echo 'no name';
+													}?>
+													
+												</td>
 												<td >
 													<a href="<?= Url::to(['applicants/view','id' => $allValue->id])?>"> View</a>
 													|
@@ -204,11 +246,32 @@ use yii\widgets\ActiveForm;
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-danger">Declined</button>
 													
+													
+													<? }?>
+													<? if($allValue->status < 2){?>
+													<button class="btn btn-info">Incomplete</button>
 													<? }?>
 													
 												</td>
-												<td><?= $allValue->applicant_id;?></td>
-												<td><?= $allValue->last_name.' '.$allValue->first_name.' '.$allValue->middle_name?></td>
+												<td>
+													<?
+													foreach($allValue->filenumber as $fileNumber){
+														echo $fileNumber->file_number.'<br>';
+													}
+													?>
+												</td>
+												<td>
+													<? if($allValue->stage_status > 2){ ?>
+													<? if($allValue->applicant_type == 1){ 
+															echo $allValue->individual->last_name.' '.$allValue->individual->first_name.' '.$allValue->individual->middle_name;
+														}else{
+															echo $allValue->organization->organization_name;
+														} ?>
+													<?}else{
+														echo 'no name';
+													}?>
+													
+												</td>
 												<td >
 													<a href="<?= Url::to(['applicants/view','id' => $allValue->id])?>"> View</a>
 													|
@@ -217,7 +280,9 @@ use yii\widgets\ActiveForm;
 												</td>
 												<td>
 													<? if($allValue->status == 2){?>
-													<button class="btn btn-primary">Start Verification</button>
+													<a href="<?= Url::to(['applicants/statverification','id'=>$allValue->id]);?>">
+														<button class="btn btn-primary">Start Verification</button>
+													</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
 													<button class="btn btn-success">Assing A Space</button>
@@ -268,10 +333,30 @@ use yii\widgets\ActiveForm;
 													<button class="btn btn-danger">Declined</button>
 													
 													<? }?>
+													<? if($allValue->status < 2){?>
+													<button class="btn btn-info">Incomplete</button>
+													<? }?>
 													
 												</td>
-												<td><?= $allValue->applicant_id;?></td>
-												<td><?= $allValue->last_name.' '.$allValue->first_name.' '.$allValue->middle_name?></td>
+												<td>
+													<?
+													foreach($allValue->filenumber as $fileNumber){
+														echo $fileNumber->file_number.'<br>';
+													}
+													?>
+												</td>
+												<td>
+													<? if($allValue->applicant_type == 1){ 
+															if($allValue->stage_status > 1){
+																echo $allValue->individual->last_name.' '.$allValue->individual->first_name.' '.$allValue->individual->middle_name;
+															}else{
+																echo 'No Name';
+															}
+														}else{
+															echo $allValue->organization->organization_name;
+														} ?>
+													
+												</td>
 												<td >
 													<a href="<?= Url::to(['applicants/view','id' => $allValue->id])?>"> View</a>
 													|
@@ -280,7 +365,9 @@ use yii\widgets\ActiveForm;
 												</td>
 												<td>
 													<? if($allValue->status == 2){?>
+													<a href="<?= Url::to(['applicants/statverification','id'=>$allValue->id]);?>">
 													<button class="btn btn-primary">Start Verification</button>
+													</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
 													<button class="btn btn-success">Assing A Space</button>

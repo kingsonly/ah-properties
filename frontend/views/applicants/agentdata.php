@@ -32,6 +32,7 @@ $gender =[
 <style>
 	
 </style>
+<? if($rootModel->applicant_type == 1){ ?>
 <div class="container">
 <!--							form content goes here-->
 							 <div class="row">
@@ -78,6 +79,7 @@ $gender =[
 							
 							
 						</div> 
+<? }?>
 						
 						<div class="container content-form-area">
 <!--							form content goes here-->
@@ -93,7 +95,7 @@ $gender =[
 												<div class="row">
 														<div class="col-md-4">
 															<div class="form-group">
-																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $bioData->applicant_id])->label(false); ?>
+																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel->id])->label(false); ?>
 																
 																<?= $form->field($model, 'agent_title')->dropDownList(ArrayHelper::map($titles, 'id', 'name'),['class'=>'custom-select']) ?>
 														    </div>
@@ -159,7 +161,7 @@ $gender =[
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 												</div>
 												<div class="col-md-5">
-													<?= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
+													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
 												<div class="col-md-2"></div>
 													</div>
@@ -201,9 +203,9 @@ $gender =[
         success: function (data) {
         	newData = data.data
 			if(data.status == 1){
-				$(document).find('#renderapplicationform').load('$declerationDetails'+'&id='+data.id);
+				$(document).find('#renderapplicationform').load('$declerationDetails'+'&id='+data.data.applicant_id);
 				$(document).find('.list-group-item').removeClass('active');
-				$(document).find('#declearationactive').addClass('active');
+				$(document).find('#decearation').addClass('active')
 				toastr.success('Agent  Saved')
 			}else{
 				alert('Please confirm your data to make sure values are correct')

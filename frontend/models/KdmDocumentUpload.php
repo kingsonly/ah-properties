@@ -31,7 +31,7 @@ class KdmDocumentUpload extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['applicant_id', 'document_type'], 'required'],
+            [['applicant_id', 'document_type','imageFile'], 'required'],
             [[ 'status'], 'integer'],
             [['document_id', 'imageFile','image_path'], 'safe'],
 			[['imageFile'], 'file', 'extensions' => 'png,jpg'],

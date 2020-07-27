@@ -11,42 +11,20 @@ use yii\helpers\Url;
 	.help-block{
 	color: red !important;
 }
+	.list-group-item a{
+		text-transform: uppercase;
+	}
 </style>
 <div class="container-fluid">
 			<div class="container">
 				<div class="row  ">
 					<div class="col-md-3 header-text-color">
 						<div class="side-menu-container">
-						<ul class="list-group list-group-flush">
+						<ul class="list-group list-group-flush" id="sidemenu">
 							<li class="list-group-item active" id="bioactive" >
-								<a class="nav-link header-text-color" href="#">BIO DATA</a>
-							</li>
-							<li class="list-group-item" id="contactactive">
-								<a class="" href="#">CONTACT DETAILS</a>
-							</li>
-							<li class="list-group-item" id="nextofkinactive">
-								<a class="" href="#">NEXT OF KIN</a>
+								<a class="nav-link header-text-color" href="#">applicant type</a>
 							</li>
 							
-							<li class="list-group-item">
-								<a class="" href="#">SPACE BOOKING</a>
-							</li>
-							
-							<li class="list-group-item" id="documentactive">
-								<a class="" href="#">DOCUMENT UPLOAD</a>
-							</li>
-							
-							<li class="list-group-item" id="paymentactive">
-								<a class="" href="#">Payment</a>
-							</li>
-							
-							<li class="list-group-item" id="agentactive">
-								<a class="" href="#">Agent</a>
-							</li>
-							
-							<li class="list-group-item" id="declearationactive">
-								<a class="" href="#">DECLARATION</a>
-							</li>
 							
 							</ul>
 						</div>
@@ -64,12 +42,12 @@ use yii\helpers\Url;
 
 
 <?
-	$biodata = Url::to(['applicants/biodata']);
+	$stage1 = Url::to(['applicants/stage1']);
 	$createUrl = Url::to(['applicants/biodata']);
 	$viewUrl = Url::to(['customer/view']);
 	$createCustomerFormJs = <<<JS
 	
-	$(document).find('#renderapplicationform').load('$biodata');
+	$(document).find('#renderapplicationform').load('$stage1');
 
 $('#form-customer').on('beforeSubmit', function (e) {
 	var \$form = $(this);

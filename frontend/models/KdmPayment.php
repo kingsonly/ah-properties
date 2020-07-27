@@ -41,7 +41,7 @@ class KdmPayment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['applicant_id',  'payment_mode', 'bank_branch', 'payment_date',  'teller_number', 'amount', 'amount_word'], 'required'],
+            [['applicant_id',  'payment_mode', 'bank_branch', 'payment_date',  'teller_number', 'amount', 'amount_word','file_number_id','imageFile'], 'required'],
             [['payment_date', 'receipt_date','imageFile','image'], 'safe'],
             [['amount', 'status'], 'integer'],
             [['applicant_id'], 'string', 'max' => 25],
@@ -100,4 +100,9 @@ class KdmPayment extends \yii\db\ActiveRecord
             return false;
         }
     }
+	
+	public function getFilenumber(){
+
+		return $this->hasOne(KdmApplicantFileNumber::className(), ['id' => 'file_number_id']);
+	}
 }

@@ -128,7 +128,7 @@ $identification =[
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 												</div>
 												<div class="col-md-5">
-													<?= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
+													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
 												<div class="col-md-2"></div>
 													</div>
@@ -170,9 +170,9 @@ $identification =[
         success: function (data) {
         	newData = data.data
 			if(data.status == 1){
-				$(document).find('#renderapplicationform').load('$paymentDetails'+'&id='+data.id);
+				$(document).find('#renderapplicationform').load('$paymentDetails'+'&id='+newData.applicant_id);
 				$(document).find('.list-group-item').removeClass('active');
-				$(document).find('#paymentactive').addClass('active');
+				$(document).find('#payment').addClass('active')
 				toastr.success('Documents Saved')
 			}else{
 				alert('Please confirm your data to make sure values are correct')

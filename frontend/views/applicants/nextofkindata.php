@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use frontend\models\KdmState;
+use kartik\depdrop\DepDrop;
 $titles =[
 	[
 	'id' =>'Mr',
@@ -22,7 +23,7 @@ $titles =[
 
 $country =[
 	[
-	'id' =>'Nigeria',
+	'id' =>'160',
 	'name' =>'Nigeria',
 	],
 	
@@ -33,7 +34,7 @@ $state = [];
 
 foreach($dbState as $key => $value){
 	array_push($state,[
-	'id' =>$value->name,
+	'id' =>$value->id,
 	'name' =>$value->name,
 	]);
 }
@@ -182,10 +183,17 @@ foreach($dbState as $key => $value){
 															
 														</div>
 														<div class="col-md-4">
-															<?= $form->field($model, 'state')->dropDownList(ArrayHelper::map($state, 'id', 'name'),['class'=>'custom-select']) ?>
+															<?= $form->field($model, 'state')->dropDownList(ArrayHelper::map($state, 'id', 'name'),['class'=>'custom-select','id' => 'state']) ?>
 														</div>
 														<div class="col-md-4">
-															<?= $form->field($model, 'city')->textInput(['id' => 'city']); ?>
+															<? echo $form->field($model, 'city')->widget(DepDrop::classname(), [
+											 'options' => ['id'=>'lga'],
+											 'pluginOptions'=>[
+												 'depends'=>['state'],
+												 'placeholder' => 'Select...',
+												 'url' => Url::to(['/applicants/localgov'])
+											 ]
+										 ]); ?>
 
 														</div>
 													</div>
@@ -201,7 +209,7 @@ foreach($dbState as $key => $value){
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 												</div>
 												<div class="col-md-5">
-													<?= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
+													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
 												<div class="col-md-2"></div>
 												
@@ -245,9 +253,9 @@ foreach($dbState as $key => $value){
         success: function (data) {
         	newData = data.data
 			if(data.status == 1){
-				$(document).find('#renderapplicationform').load('$uploaddocumentDetails'+'&id='+data.id);
+				$(document).find('#renderapplicationform').load('$uploaddocumentDetails'+'&id='+newData.applicant_id);
 				$(document).find('.list-group-item').removeClass('active');
-				$(document).find('#documentactive').addClass('active');
+				$(document).find('#identification').addClass('active')
 				toastr.success('Next Of Kin  Saved')
 			}else{
 				alert('Please confirm your data to make sure values are correct')

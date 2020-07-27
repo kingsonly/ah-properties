@@ -45,4 +45,11 @@ class KdmDeclaration extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+	
+	public function getApplicant(){
+
+		return $this->hasOne(KdmRootApplicant::className(), ['id' => 'applicant_id']);
+	}
+	
+	
 }
