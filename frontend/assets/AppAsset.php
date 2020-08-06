@@ -12,7 +12,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css',
+        //'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css',
         'css/main.css',
         'css/all.min.css',
         '//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css',
@@ -27,6 +27,6 @@ class AppAsset extends AssetBundle
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        //'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap4\BootstrapAsset',
     ];
 }

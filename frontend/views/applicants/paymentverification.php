@@ -56,17 +56,17 @@ $verificationModel = new VerificationModel();
 								</div>
 												
 											<?php $form = ActiveForm::begin(['id' => 'bioveri']); ?>
-											<div class="row ">
+											<div class="row mar-t-10">
 														
 														<div class="col-md-1">
 													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => '','id' => 'customCheck'])->label(false); ?>
 																	
 												</div>
-												<div class="col-md-9">
+												<div class="col-md-11">
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
-												<div class="col-md-2"></div>
+												
 												
 													</div>
 										<?php ActiveForm::end(); ?>
@@ -83,7 +83,7 @@ $verificationModel = new VerificationModel();
 	
 		
 	$('#bioveri').on('beforeSubmit', function (e) {
-	toastr.info('Proccessing Contact details please wait')
+	toastr.info('Processing')
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 
@@ -110,7 +110,7 @@ $verificationModel = new VerificationModel();
 				}
 				$(document).find('.list-group-item').removeClass('active');
 				$(document).find('#nextofkin').addClass('active')
-				toastr.success('Contact Saved')
+				toastr.success('Saved')
 			}else{
 				alert('Please confirm your data to make sure values are correct')
 			}

@@ -21,17 +21,15 @@ $verificationModel = new VerificationModel();
 								<div class="row" style="margin-top:20px">
 											<div class="col-md-12 form-area declearation_container">
 												
-												<div class="box-label">Applicant Selection </div>
+												<div class="box-label">Approval </div>
 												
 												
 												<div class="row" id="applicantselection">
-														<div class="col-md-6">
+														<div class="col-md-12">
 															
 														I Hereby Confirm that all the information and documents provided by the applicant are complete and have been verified. 
 														</div>
-														<div class="col-md-6">
-															
-														</div>
+														
 										 
 														
 														
@@ -47,7 +45,7 @@ $verificationModel = new VerificationModel();
 											</div>
 												
 											<?php $form = ActiveForm::begin(['id' => 'bioveri']); ?>
-											<div class="row ">
+											<div class="row mar-t-10">
 														
 														<div class="col-md-2">
 													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => '','id' => 'customCheck'])->label(false); ?>
@@ -75,7 +73,7 @@ $verificationModel = new VerificationModel();
 	
 		
 	$('#bioveri').on('beforeSubmit', function (e) {
-	toastr.info('Proccessing Contact details please wait')
+	toastr.info('Processing')
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 

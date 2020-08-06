@@ -41,7 +41,7 @@ class KdmDeclaration extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'applicant_id' => 'Applicant ID',
-            'declaration' => 'Declaration',
+            'declaration' => '',
             'status' => 'Status',
         ];
     }

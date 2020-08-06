@@ -38,22 +38,21 @@ $identification =[
 												<div class="box-label">CAC Certificate </div>
 												
 												
-												
+												<?= $form->field($model, 'document_type')->hiddenInput(['value' => 'cac certificate'])->label(false); ?>
+																
+																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel])->label(false); ?>
+																
+																<?= $form->field($model, 'document_id')->hiddenInput(['id' => 'document_id','value' => 0])->label(false); ?>
 												
 													<div class="row">
 														
 														<div class="col-md-12">
 															
-															<div class="form-group">
-																<?= $form->field($model, 'document_type')->hiddenInput(['value' => 'cac certificate'])->label(false); ?>
+															
+																<div class="custom-file">
 																
-																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel])->label(false); ?>
-																
-																<?= $form->field($model, 'document_id')->hiddenInput(['id' => 'document_id','value' => 0])->label(false); ?>
-																
-																<?= $form->field($model, 'imageFile',['template' => "{label}\n<div class='col-md-6'>{input}</div>\n{hint}\n{error}",
-                    'labelOptions' => [ 'class' => 'custom-file-label' ]])->fileInput(['class'=>'customFile']) ?>
-														    </div>
+																<?= $form->field($model, 'imageFile',['template' => "{label}\n<div class='col-md-6'>{input}</div>\n{hint}\n{error}", 'labelOptions' => [ 'class' => 'custom-file-label' ]])->fileInput(['class'=>'customFile']) ?>
+															</div>
 
 														</div>
 														

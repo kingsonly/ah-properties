@@ -17,23 +17,18 @@ $titles =[
 	
 </style>
 
+
+<? if($rootModel->applicant_type == 1){?>
 <div class="container">
 <!--							form content goes here-->
 							 <div class="row">
 									<div class="col-md-9">
-										<div class="row">
-											<div class="col-md-12">
-												<h6 class="header-text-color">ID</h6>
-												<h5><?//= $bioData->applicant_id;?></h5>
-											
-											</div>
 										
-										</div>
 										
 										<div class="row">
 											<div class="col-md-12">
 												<h6 class="header-text-color">Name</h6>
-												<h5><?//= $bioData->last_name.' '.$bioData->first_name.' '.$bioData->middle_name;?> </h5>
+												<h5><?= $modelBio->last_name.' '.$modelBio->first_name.' '.$modelBio->middle_name;?> </h5>
 											
 											</div>
 										
@@ -42,7 +37,7 @@ $titles =[
 										<div class="row">
 											<div class="col-md-12">
 												<h6 class="header-text-color">Occupation</h6>
-												<h5><?//= $bioData->occupation;?></h5>
+												<h5><?= $modelBio->occupation;?></h5>
 											
 											</div>
 										
@@ -52,7 +47,7 @@ $titles =[
 										<div class="row">
 											<div class="col-md-12">
 												
-												<?//= Html::img('@web/'.$bioData->image, ['alt' => 'My logo','class'=>'imgtins']) ?>
+												<?= Html::img('@web/'.$modelBio->image, ['alt' => 'My logo','class'=>'imgtins']) ?>
 											
 											</div>
 										
@@ -63,6 +58,46 @@ $titles =[
 							
 							
 						</div> 
+<? }?>
+<? if($rootModel->applicant_type == 2){?>
+<div class="container">
+<!--							form content goes here-->
+							 <div class="row">
+									<div class="col-md-12 ">
+												
+												
+												
+												
+													<div class="row ">
+														<div class="col-md-12 form-area" style="margin-top:20px">
+															<div class="box-label">Organization Name </div>
+															<div class="row">
+																<div class="col-md-12 " >
+																	
+																	<h5><?= $modelBio->organization_name?></h5>
+																</div>
+																
+																
+																
+																
+																
+														    </div>
+															
+															
+														</div>
+														
+													</div>
+													
+													
+
+												 
+											</div>
+								</div>
+							
+							
+						</div> 
+<? }?>
+
 						
 						<div class="container content-form-area">
 <!--							form content goes here-->
@@ -74,21 +109,20 @@ $titles =[
 												
 												<div class="box-label">Payment FOR FILE  <?= $fileNumberModel[$paymentCount]->file_number?> </div>
 												
-												
-												<div class="row">
-														<div class="col-md-4">
-															<div class="form-group">
-																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel])->label(false); ?>
+												<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel->id])->label(false); ?>
 																
 																<?= $form->field($model, 'file_number_id')->hiddenInput(['value' => $fileNumberModel[$paymentCount]->id])->label(false); ?>
+												<div class="row">
+														<div class="col-md-4">
 																
 																<?= $form->field($model, 'payment_mode')->textInput(['id' => 'payment_mode']);?>
-														    </div>
+														    
 														</div>
 														<div class="col-md-4">
-															
+															<div class="custom-file">
 															<?= $form->field($model, 'imageFile',['template' => "{label}\n<div class='col-md-6'>{input}</div>\n{hint}\n{error}",
                     'labelOptions' => [ 'class' => 'custom-file-label' ]])->fileInput(['class'=>'customFile'])?>
+															</div> 
 														</div>
 													
 													<div class="col-md-4">
@@ -104,7 +138,7 @@ $titles =[
 															<div class="form-group">
 																
 																<? echo $form->field($model, 'payment_date')->widget(DatePicker::classname(), [
-																	'options' => ['placeholder' => 'Enter Datte of Payment'],
+																	'options' => ['placeholder' => 'Enter Date of Payment'],
 																	'pluginOptions' => [
 																		'autoclose'=>true,
 																		'format' => 'yyyy-mm-dd'

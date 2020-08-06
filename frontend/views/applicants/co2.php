@@ -106,11 +106,6 @@ $identification =[
   $(document).find("#customFile").addClass("selected").html('fileName');
 });
 
-
-
-	
-	
-	
 	$('#organization_document_form').on('beforeSubmit', function (e) {
 	toastr.info('Uploading Documents Please Wait')
 	var \$form = $(this);

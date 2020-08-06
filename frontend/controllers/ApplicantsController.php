@@ -382,15 +382,21 @@ class ApplicantsController extends Controller
     {
 		
 		$this->layout = 'preview';
-		$modelBio = KdmApplicantBioData::find()->andWhere(['id' => $id])->one();
+		$rootModel = KdmRootApplicant::find()->andWhere(['id' => $id])->one();
+		if($rootModel->applicant_type == 1){
+			$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $id])->one();
+		}else{
+			$modelBio = KdmApplicantOrganizationBio::find()->andWhere(['applicant_id' => $id])->one();
+		}
 		
-		$modelKdmPayment = KdmPayment::find()->andWhere(['applicant_id' => $modelBio->applicant_id])->all();
+		$fileModel = KdmApplicantFileNumber::find()->andwhere(['applicant_id' => $rootModel->id])->all();
 		
-		$modelKdmUser = User::find()->andWhere(['id' => $modelBio->user_id])->one();
+		$modelKdmUser = User::find()->andWhere(['id' => $rootModel->user_id])->one();
 		
 		return $this->render('payment', [
 			'modelBio' => $modelBio,
-			'modelKdmPayment' => $modelKdmPayment,
+			'fileModel' => $fileModel,
+			'rootModel' => $rootModel,
 			
                 
             ]);
@@ -403,15 +409,22 @@ class ApplicantsController extends Controller
 		
 		$this->layout = 'preview';
 		
-		
 		$modelKdmPayment = KdmPayment::find()->andWhere(['id' => $id])->one();
-		$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $modelKdmPayment->applicant_id])->one();
+		$rootModel = KdmRootApplicant::find()->andWhere(['id' => $modelKdmPayment->applicant_id])->one();
+		if($rootModel->applicant_type == 1){
+			$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $modelKdmPayment->applicant_id])->one();
+		}else{
+			$modelBio = KdmApplicantOrganizationBio::find()->andWhere(['applicant_id' => $modelKdmPayment->applicant_id])->one();
+		}
 		
-		$modelKdmUser = User::find()->andWhere(['id' => $modelBio->user_id])->one();
+		
+		
+		$modelKdmUser = User::find()->andWhere(['id' => $rootModel->user_id])->one();
 		
 		return $this->render('viewpayment', [
 			'modelBio' => $modelBio,
 			'modelKdmPayment' => $modelKdmPayment,
+			'rootModel' => $rootModel,
 			
                 
             ]);
@@ -426,15 +439,21 @@ class ApplicantsController extends Controller
 		
 		
 		$modelKdmPayment = KdmPayment::find()->andWhere(['id' => $id])->one();
-		$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $modelKdmPayment->applicant_id])->one();
+		$rootModel = KdmRootApplicant::find()->andWhere(['id' => $modelKdmPayment->applicant_id])->one();
+		if($rootModel->applicant_type == 1){
+			$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $modelKdmPayment->applicant_id])->one();
+		}else{
+			$modelBio = KdmApplicantOrganizationBio::find()->andWhere(['applicant_id' => $modelKdmPayment->applicant_id])->one();
+		}
 		
-		$modelKdmUser = User::find()->andWhere(['id' => $modelBio->user_id])->one();
+		
+		
+		$modelKdmUser = User::find()->andWhere(['id' => $rootModel->user_id])->one();
 		
 		return $this->render('receipt', [
 			'modelBio' => $modelBio,
 			'modelKdmPayment' => $modelKdmPayment,
-			
-                
+			'rootModel' => $rootModel,
             ]);
 		
 		
@@ -628,16 +647,23 @@ class ApplicantsController extends Controller
 	
 	public function actionPaymentdata($id)
     {
-		$bioData = KdmApplicantBioData::find()->andWhere(['applicant_id' => $id])->one();
+		$rootModel = KdmRootApplicant::find()->andWhere(['id' => $id])->one();
+		if($rootModel->applicant_type == 1){
+			$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $id])->one();
+		}else{
+			$modelBio = KdmApplicantOrganizationBio::find()->andWhere(['applicant_id' => $id])->one();
+		}
+		
 		$fileNumberModel = KdmApplicantFileNumber::find()->andWhere(['applicant_id' => $id])->all();
 		$paymentCount = KdmPayment::find()->andWhere(['applicant_id' => $id])->count();
 		$model = new KdmPayment();
 		
 		return $this->renderAjax('paymentdata', [
 			'model' => $model,
-			'rootModel' => $id,
+			'rootModel' => $rootModel, 
 			'paymentCount' => $paymentCount,
 			'fileNumberModel' => $fileNumberModel,
+			'modelBio' => $modelBio,
                 
             ]);
     }
@@ -655,7 +681,7 @@ class ApplicantsController extends Controller
 		return $this->renderAjax('agentdata', [
 			'model' => $model,
 			'rootModel' => $rootModel,
-			'bioData' => $bioData,
+			'modelBio' => $bioData,
                 
             ]);
     }
@@ -673,7 +699,7 @@ class ApplicantsController extends Controller
 		return $this->renderAjax('declerationdata', [
 			'model' => $model,
 			'rootModel' => $rootModel,
-			'bioData' => $bioData,
+			'modelBio' => $bioData,
 			'declarationModel' => $declarationModel,
                 
             ]);
@@ -712,6 +738,7 @@ class ApplicantsController extends Controller
             
         }
     }
+	
 	public function actionProcesscontact()
     {
 		$model = new KdmContactDetails();
@@ -799,9 +826,6 @@ class ApplicantsController extends Controller
             
         }
     }
-	
-	
-	
 	
 	
 	public function actionProcessorganizationdocumentformidentity()

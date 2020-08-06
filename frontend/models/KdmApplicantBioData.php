@@ -72,7 +72,7 @@ class KdmApplicantBioData extends \yii\db\ActiveRecord
             'occupation' => 'Occupation',
             'nationality' => 'Nationality',
             'state_of_origin' => 'State Of Origin',
-            'local_government_of_origin' => 'Local Government Of Origin',
+            'local_government_of_origin' => 'LGA',
             'marital_status' => 'Marital Status',
             'highest_education' => 'Highest Education',
             'stage_status' => 'Stage Status',
@@ -103,4 +103,19 @@ class KdmApplicantBioData extends \yii\db\ActiveRecord
             return false;
         }
     }
+	
+	public function getStates(){
+
+		return $this->hasOne(KdmState::className(), ['id' => 'state_of_origin']);
+	}
+	
+	public function getCountrys(){
+
+		return $this->hasOne(KdmCountry::className(), ['id' => 'nationality']);
+	}
+	
+	public function getLga(){
+
+		return $this->hasOne(KdmCities::className(), ['id' => 'local_government_of_origin']);
+	}
 }

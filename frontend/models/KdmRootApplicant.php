@@ -53,6 +53,7 @@ class KdmRootApplicant extends \yii\db\ActiveRecord
             'verification_status' => 'Verification Status',
             'date_created' => 'Date Created',
             'status' => 'Status',
+            'user_validate' => '',
         ];
     }
 	

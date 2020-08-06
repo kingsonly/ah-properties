@@ -62,12 +62,27 @@ class KdmOrganizationContactDetails extends \yii\db\ActiveRecord
             'city' => 'City',
             'state' => 'State',
             'country' => 'Country',
-            'local_government' => 'Local Government',
-            'pobox' => 'Pobox',
-            'c_o' => 'C O',
+            'local_government' => 'LGA',
+            'pobox' => 'P.O.Box',
+            'c_o' => 'C/O',
             'office_number' => 'Office Number',
             'email' => 'Email',
             'status' => 'Status',
         ];
     }
+	
+	public function getStates(){
+
+		return $this->hasOne(KdmState::className(), ['id' => 'state']);
+	}
+	
+	public function getCountrys(){
+
+		return $this->hasOne(KdmCountry::className(), ['id' => 'country']);
+	}
+	
+	public function getLga(){
+
+		return $this->hasOne(KdmCities::className(), ['id' => 'city']);
+	}
 }

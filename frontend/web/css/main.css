@@ -1,3 +1,30 @@
+body{
+	margin-bottom: 40px;
+}
+
+.display_image{
+		width: 200px;
+		height: 300px;
+	}
+	.big_image{
+		width: 300px;
+		height: 400px;
+	}
+	
+	.medium_image{
+		width: 200px;
+		height: 300px;
+	}
+
+.mar-t-10{
+	margin-top: 10px;
+}
+.btn-height{
+	height: 100% !important;
+}
+.img-width-inherit{
+	width: inherit;
+}
 .menu-container{
 				height: 70px;
 			}
@@ -30,6 +57,8 @@
 				
 				border-radius: 10px;
 				padding-top: 20px;
+				margin-bottom: 30px;
+				padding-bottom: 20px;
 				
 			}
 			.notification-container{
@@ -63,32 +92,38 @@
 				width: 70%;
 			}
 			.content-form-area{
-				margin-top: 10px;
+				
 				border: solid 2px #F5FBFF;
 				
 				border-radius: 8px;
 				padding-top: 40px;
 				padding-left: 40px;
 				padding-right: 40px;
+				
+				margin-bottom: 20px;
+				padding-bottom: 20px;
 			}
 			
 			.form-area{
 				border: solid 1px #8EC7F0;
 				border-radius: 8px;
 				padding-top: 20px;
+				padding-bottom: 20px;
 			}
 			.box-label{
 				position: absolute;
 				top:-14px;
 				background: #fff;
-				min-width: 181px;
+				padding-right: 10px;
 				padding-left: 10px;
 				color: #8EC7F0;
 				font-size: 14px;
+				text-transform: capitalize;
 			}
 			.button-design{
 				width: 100%;
 				height: 72px;
+				text-transform: uppercase;
 			}
 			
 			.button-design_medium{

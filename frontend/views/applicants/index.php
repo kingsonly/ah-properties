@@ -14,15 +14,19 @@ use yii\helpers\Url;
 	.list-group-item a{
 		text-transform: uppercase;
 	}
+	.contentholder{
+		margin-top: 30px;
+		margin-bottom: 10px;
+	}
 </style>
-<div class="container-fluid">
+<div class="container-fluid contentholder">
 			<div class="container">
 				<div class="row  ">
 					<div class="col-md-3 header-text-color">
 						<div class="side-menu-container">
 						<ul class="list-group list-group-flush" id="sidemenu">
 							<li class="list-group-item active" id="bioactive" >
-								<a class="nav-link header-text-color" href="#">applicant type</a>
+								<a class="nav-link header-text-color" href="#">application type</a>
 							</li>
 							
 							

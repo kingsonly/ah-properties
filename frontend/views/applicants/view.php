@@ -6,19 +6,7 @@ use yii\widgets\ActiveForm;
 
 ?>
 <style>
-	.display_image{
-		width: 200px;
-		height: 300px;
-	}
-	.big_image{
-		width: 300px;
-		height: 400px;
-	}
 	
-	.medium_image{
-		width: 200px;
-		height: 300px;
-	}
 </style>
 <? if($rootModel->applicant_type == 1){ ?>			
 						
@@ -78,7 +66,7 @@ use yii\widgets\ActiveForm;
 																
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Nationality</h6>
-																	<h5><?= $modelBio->nationality; ?></h5>
+																	<h5><?= $modelBio->countrys->name; ?></h5>
 																</div>
 																
 														    </div>
@@ -86,12 +74,12 @@ use yii\widgets\ActiveForm;
 															<div class="row">
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">State</h6>
-																	<h5><?= $modelBio->state_of_origin; ?></h5>
+																	<h5><?= $modelBio->states->name; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Local Government</h6>
-																	<h5><?= $modelBio->local_government_of_origin; ?></h5>
+																	<h5><?= $modelBio->lga->name; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
@@ -132,17 +120,17 @@ use yii\widgets\ActiveForm;
 																
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">City/Town</h6>
-																	<h5><?= $modelKdmContactDetails->city; ?></h5>
+																	<h5><?= $modelKdmContactDetails->lga->name; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">State</h6>
-																	<h5><?= $modelKdmContactDetails->state; ?></h5>
+																	<h5><?= $modelKdmContactDetails->states->name; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Country</h6>
-																	<h5><?= $modelKdmContactDetails->country; ?></h5>
+																	<h5><?= $modelKdmContactDetails->countrys->name; ?></h5>
 																</div>
 																
 														    </div>
@@ -176,9 +164,9 @@ use yii\widgets\ActiveForm;
 											</div>
 											<div class="col-md-3 ">
 												<?= Html::img('@web/'.$modelBio->image, ['alt' => 'My logo','class'=>'medium_image']) ?>
-												<h4><?= $modelBio->applicant_id?></h4>
 												
-												<? $confirmUrl = Url::to(['applicants/payment','id'=>$modelBio->id]);?>
+												
+												<? $confirmUrl = Url::to(['applicants/payment','id'=>$modelBio->applicant_id]);?>
 															<a href="<?= $confirmUrl;?>">
 															
 													<?= Html::button('Payments', ['class' => 'btn btn-primary btn-lg  button-design_medium']) ?>
@@ -200,19 +188,28 @@ use yii\widgets\ActiveForm;
 												<div class="row">
 														<div class="col-md-12">
 															<div class="row">
-																<div class="col-md-4 " >
-																	<h6 class="header-text-color">Relationship</h6>
-																	<h5><?= $modelKdmNextOfKin->relationship; ?></h5>
-																</div>
-																
-																<div class="col-md-6 " >
+																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Title</h6>
 																	<h5><?= $modelKdmNextOfKin->title; ?></h5>
 																</div>
 																
+																<div class="col-md-3 " >
+																	<h6 class="header-text-color">First name</h6>
+																	<h5><?= $modelKdmNextOfKin->first_name; ?></h5>
+																</div>
 																
 																
-																<div class="col-md-2 " >
+																
+																<div class="col-md-3" >
+																	<h6 class="header-text-color">Middle name</h6>
+																	<h5><?= $modelKdmNextOfKin->middle_name; ?></h5>
+																	
+																</div>
+																
+																<div class="col-md-3" >
+																	
+																	<h6 class="header-text-color">Last name</h6>
+																	<h5><?= $modelKdmNextOfKin->last_name; ?></h5>
 																	
 																</div>
 																
@@ -222,25 +219,25 @@ use yii\widgets\ActiveForm;
 															
 															<div class="row">
 																<div class="col-md-3 " >
-																	<h6 class="header-text-color">First Name</h6>
-																	<h5><?= $modelKdmNextOfKin->first_name; ?></h5>
+																	<h6 class="header-text-color">Relationship</h6>
+																	<h5><?= $modelKdmNextOfKin->relationship; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
-																	<h6 class="header-text-color">Middle Name</h6>
-																	<h5><?= $modelKdmNextOfKin->middle_name; ?></h5>
+																	<h6 class="header-text-color">street</h6>
+																	<h5><?= $modelKdmNextOfKin->street_name; ?></h5>
 																</div>
 																
 																
 																
 																<div class="col-md-3 " >
-																	<h6 class="header-text-color">Surname</h6>
-																	<h5><?= $modelKdmNextOfKin->last_name; ?></h5>
+																	<h6 class="header-text-color">District</h6>
+																	<h5><?= $modelKdmNextOfKin->district; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
-																	<h6 class="header-text-color">Mobile Number</h6>
-																	<h5><?= $modelKdmNextOfKin->mobile_number; ?></h5>
+																	<h6 class="header-text-color">City</h6>
+																	<h5><?= $modelKdmNextOfKin->lga->name; ?></h5>
 																</div>
 																
 																
@@ -249,33 +246,27 @@ use yii\widgets\ActiveForm;
 															
 															
 															<div class="row">
-																<div class="col-md-2 " >
-																	<h6 class="header-text-color">Street</h6>
-																	<h5><?= $modelKdmNextOfKin->street_name; ?></h5>
-																</div>
-																
-																
-																
 																<div class="col-md-3 " >
-																	<h6 class="header-text-color"> District</h6>
-																	<h5><?= $modelKdmNextOfKin->district; ?></h5>
-																</div>
-																<div class="col-md-3 " >
-																	<h6 class="header-text-color"> City</h6>
-																	<h5><?= $modelKdmNextOfKin->city; ?></h5>
-																</div>
-																
-																<div class="col-md-2 " >
 																	<h6 class="header-text-color">State</h6>
-																	<h5><?= $modelKdmNextOfKin->state; ?></h5>
+																	<h5><?= $modelKdmNextOfKin->states->name; ?></h5>
 																</div>
 																
 																
 																
-																<div class="col-md-2" >
-																	<h6 class="header-text-color">Country</h6>
-																	<h5><?= $modelKdmNextOfKin->country; ?></h5>
+																<div class="col-md-3 " >
+																	<h6 class="header-text-color"> Country</h6>
+																	<h5><?= $modelKdmNextOfKin->countrys->name; ?></h5>
 																</div>
+																
+																<div class="col-md-3 " >
+																	<h6 class="header-text-color"> Mobile Number</h6>
+																	<h5><?= $modelKdmNextOfKin->mobile_number; ?></h5>
+																</div>
+																
+																<div class="col-md-3 " >
+																	
+																</div>
+																
 																
 																
 																
@@ -290,7 +281,6 @@ use yii\widgets\ActiveForm;
 
 												 
 											</div>
-									
 									
 										<div class="col-md-12 form-area" style="margin-top:20px">
 												
@@ -340,44 +330,38 @@ use yii\widgets\ActiveForm;
 		</div>
 									
 									
-										<div class="col-md-12 form-area" style="margin-top:20px">
-												
-												<div class="box-label">AGENT </div>
-												
-												
-												<div class="row">
-														<div class="col-md-4">
-															<h6 class="header-text-color">Title</h6>
-																	<h5><?= $modelKdmApplicantAgent->agent_title; ?></h5>
-														</div>
-													<div class="col-md-4">
-															<h6 class="header-text-color">First Name</h6>
-																	<h5><?= $modelKdmApplicantAgent->agent_first_name; ?></h5>
-														</div>
-													<div class="col-md-4">
-															<h6 class="header-text-color">Last Name</h6>
-																	<h5><?= $modelKdmApplicantAgent->agent_last_name; ?></h5>
-														</div>
 										
-													</div>
-											
-											<div class="row">
-														<div class="col-md-4">
-															<h6 class="header-text-color">Address</h6>
-																	<h5><?= $modelKdmApplicantAgent->agent_address; ?></h5>
-														</div>
-													<div class="col-md-4">
-															<h6 class="header-text-color">Email Address</h6>
-																	<h5><?= $modelKdmApplicantAgent->email_address; ?></h5>
-														</div>
-													<div class="col-md-4">
-															<h6 class="header-text-color">Mobile Number</h6>
-																	<h5><?= $modelKdmApplicantAgent->agent_mobile_number; ?></h5>
-														</div>
-										
-													</div>
-											 
+									
+									
+									<div class="col-md-12 form-area" style="margin-top:20px">
+
+										<div class="box-label">AGENT </div>
+
+
+										<div class="row">
+
+											<div class="col-md-12">
+												<h6 class="header-text-color">Name</h6>
+												<h5><?= $modelKdmApplicantAgent->agent_first_name; ?></h5>
 											</div>
+
+										</div>
+
+										<div class="row">
+
+											<div class="col-md-6">
+												<h6 class="header-text-color">Email Address</h6>
+												<h5><?= $modelKdmApplicantAgent->email_address; ?></h5>
+											</div>
+											<div class="col-md-6">
+												<h6 class="header-text-color">Mobile Number</h6>
+												<h5><?= $modelKdmApplicantAgent->agent_mobile_number; ?></h5>
+											</div>
+
+										</div>
+
+									</div>
+
 										
 								</div>
 							
@@ -395,28 +379,45 @@ use yii\widgets\ActiveForm;
 					<div class="box-label">Organization Details </div>
 
 					<div class="row">
-						<div class="col-md-6 " >
-							<h6 class="header-text-color">organization name </h6>
-							<h5><?= $modelBio->organization_name ;?></h5>
+						<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-9">
+								<div class="row">
+									<div class="col-md-6 " >
+										<h6 class="header-text-color">organization name </h6>
+										<h5><?= $modelBio->organization_name ;?></h5>
+									</div>
+									<div class="col-md-6 " >
+										<h6 class="header-text-color">organization Country </h6>
+										<h5><?= $modelBio->countrys->name ?></h5>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6 " >
+										<h6 class="header-text-color"> organization state </h6>
+										<h5><?= $modelBio->states->name ; ?></h5>
+									</div>
+
+									<div class="col-md-6 " >
+										<h6 class="header-text-color">organization local government</h6>
+										<h5><?//= $modelBio->lga->name ?></h5>
+									</div>
+
+								</div>
+							</div>
+							<div class="col-md-3">
+								<? $confirmUrl = Url::to(['applicants/payment','id'=>$modelBio->applicant_id]);?>
+								<a href="<?= $confirmUrl;?>">
+								<?= Html::button('Payents', ['class' => 'btn btn-primary  btn-lg button-design btn-height','id' =>'test']) ?>
+								</a>
+							</div>
 						</div>
-						<div class="col-md-6 " >
-							<h6 class="header-text-color">organization Country </h6>
-							<h5><?= $modelBio->organization_country ?></h5>
 						</div>
+						
 					</div>
 
-					<div class="row">
-						<div class="col-md-6 " >
-							<h6 class="header-text-color"> organization state </h6>
-							<h5><?= $modelBio->organization_state ; ?></h5>
-						</div>
-
-						<div class="col-md-6 " >
-							<h6 class="header-text-color">organization local government</h6>
-							<h5><?= $modelBio->organization_local_government ?></h5>
-						</div>
-
-					</div>
+					
 
 					
 				</div>
@@ -454,12 +455,12 @@ use yii\widgets\ActiveForm;
 						
 						<div class="col-md-4 " >
 							<h6 class="header-text-color">City</h6>
-							<h5><?= $modelContactBio->city; ?></h5>
+							<h5><?= $modelContactBio->lga->name; ?></h5>
 						</div>
 						
 						<div class="col-md-4 " >
 							<h6 class="header-text-color">State</h6>
-							<h5><?= $modelContactBio->state ; ?></h5>
+							<h5><?= $modelContactBio->states->name ; ?></h5>
 						</div>
 
 						
@@ -471,12 +472,12 @@ use yii\widgets\ActiveForm;
 					<div class="row">
 						<div class="col-md-4 " >
 							<h6 class="header-text-color">Country</h6>
-							<h5><?= $modelContactBio->country; ?></h5>
+							<h5><?= $modelContactBio->countrys->name; ?></h5>
 						</div>
 						
 						<div class="col-md-4 " >
 							<h6 class="header-text-color">Local Government</h6>
-							<h5><?= $modelContactBio->local_government; ?></h5>
+							<h5><?= $modelContactBio->lga->name; ?></h5>
 						</div>
 						
 						<div class="col-md-4 " >
@@ -626,47 +627,36 @@ use yii\widgets\ActiveForm;
 		</div>
 
 
+		
 		<div class="col-md-12 form-area" style="margin-top:20px">
 
-			<div class="box-label">AGENT </div>
+										<div class="box-label">AGENT </div>
 
 
-			<div class="row">
-				<div class="col-md-4">
-					<h6 class="header-text-color">Title</h6>
-					<h5><?= $modelKdmApplicantAgent->agent_title; ?></h5>
-				</div>
+										<div class="row">
 
-				<div class="col-md-4">
-					<h6 class="header-text-color">First Name</h6>
-					<h5><?= $modelKdmApplicantAgent->agent_first_name; ?></h5>
-				</div>
+											<div class="col-md-12">
+												<h6 class="header-text-color">Name</h6>
+												<h5><?= $modelKdmApplicantAgent->agent_first_name; ?></h5>
+											</div>
 
-				<div class="col-md-4">
-					<h6 class="header-text-color">Last Name</h6>
-					<h5><?= $modelKdmApplicantAgent->agent_last_name; ?></h5>
-				</div>
+										</div>
 
-			</div>
+										<div class="row">
 
-			<div class="row">
-				<div class="col-md-4">
-					<h6 class="header-text-color">Address</h6>
-					<h5><?= $modelKdmApplicantAgent->agent_address; ?></h5>
-				</div>
+											<div class="col-md-6">
+												<h6 class="header-text-color">Email Address</h6>
+												<h5><?= $modelKdmApplicantAgent->email_address; ?></h5>
+											</div>
+											<div class="col-md-6">
+												<h6 class="header-text-color">Mobile Number</h6>
+												<h5><?= $modelKdmApplicantAgent->agent_mobile_number; ?></h5>
+											</div>
 
-				<div class="col-md-4">
-					<h6 class="header-text-color">Email Address</h6>
-					<h5><?= $modelKdmApplicantAgent->email_address; ?></h5>
-				</div>
-				<div class="col-md-4">
-					<h6 class="header-text-color">Mobile Number</h6>
-					<h5><?= $modelKdmApplicantAgent->agent_mobile_number; ?></h5>
-				</div>
+										</div>
 
-			</div>
+									</div>
 
-		</div>
 
 		
 	</div>

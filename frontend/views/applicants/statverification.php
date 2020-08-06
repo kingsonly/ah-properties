@@ -15,7 +15,7 @@ use yii\helpers\Url;
 		text-transform: uppercase;
 	}
 </style>
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top:20px">
 			<div class="container">
 				<div class="row  ">
 <!--
@@ -33,7 +33,7 @@ use yii\helpers\Url;
 					</div>
 -->
 					<div id="renderapplicationform" class="col-md-12">
-						test
+						
 					</div>
 				</div>
 				

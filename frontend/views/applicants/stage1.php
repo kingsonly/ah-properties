@@ -222,18 +222,18 @@ $gender =[
 	
 	
 	individual = {
-	'applicanttype':'applicant type',
+	'applicanttype':'application type',
 	'biodata':'bio data',
 	'contactdetails':'contact details',
 	'nextofkin':'next of kin',
 	'identification':'identification',
 	'payment':'payment',
 	'agent':'agent',
-	'decearation':'decearation',
+	'declaration':'declaration',
 	}
 	
 	organization = {
-	'applicanttype':'applicant type',
+	'applicanttype':'application type',
 	'organizationdetails':'organization details',
 	'organizationaddress':'organization address',
 	'organizationcontact':'organization contact',
@@ -248,7 +248,7 @@ $gender =[
 	}
 	
 	$('#stage1_form').on('beforeSubmit', function (e) {
-	toastr.info('Proccessing  Data Please Wait')
+	toastr.info('Processing')
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 
@@ -267,7 +267,7 @@ $gender =[
 				
 				$(document).find('.list-group-item').removeClass('active');
 				$(document).find('#declearationactive').addClass('active');
-				toastr.success('Agent  Saved')
+				toastr.success('Saved')
 				// applicanttype 1 means its an individual form
 				if(data.data.applicanttype == 1){
 					$(document).find('#renderapplicationform').load('$individualBios'+'&id='+data.data.applicantId);

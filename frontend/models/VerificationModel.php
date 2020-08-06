@@ -21,7 +21,15 @@ class VerificationModel extends Model
     {
         return [
            
-            [['user_validate'], 'required', 'requiredValue' => 1, 'message'=>'bla-bla-bla'],
+            [['user_validate'], 'required', 'requiredValue' => 1, 'message'=>'Click on the box to verify'],
+            
+        ];
+    }
+	
+	 public function attributeLabels()
+    {
+        return [
+            'user_validate' => '',
             
         ];
     }

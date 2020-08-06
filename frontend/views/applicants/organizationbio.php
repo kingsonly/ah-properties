@@ -99,6 +99,7 @@ foreach($dbState as $key => $value){
 	<?php $form = ActiveForm::begin(['id' => 'organizationbio']); ?>
 	<div class="row">
 		<div class="col-md-12">
+			<?= $form->field($model, 'applicant_id')->hiddenInput(['id' => 'applicant_id','value' => $rootModel])->label(false); ?>
 			<?= $form->field($model, 'organization_name')->textInput(['id' => 'organization_name']); ?>
 			
 		</div>
@@ -119,7 +120,7 @@ foreach($dbState as $key => $value){
 		
 		<div class="col-md-4">
 			
-			<?= $form->field($model, 'applicant_id')->hiddenInput(['id' => 'applicant_id','value' => $rootModel])->label(false); ?>
+			
 			
 			<? echo $form->field($model, 'organization_local_government')->widget(DepDrop::classname(), [
 											 'options' => ['id'=>'lga'],

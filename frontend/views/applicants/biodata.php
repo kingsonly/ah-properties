@@ -101,14 +101,14 @@ foreach($dbState as $key => $value){
 
 							 <?php $form = ActiveForm::begin(['id' => 'bio']); ?>
 								<div class="row">
-									<div class="col-md-3">
-										<div class="form-group" style="width:60%">
+									<div class="col-md-4">
+										<div class="form-group" >
 											
 											<?= $form->field($model, 'title')->dropDownList(ArrayHelper::map($titles, 'id', 'name'),['class'=>'custom-select']) ?>
 											<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel])->label(false); ?>
 										</div>
 									</div>
-									<div class="col-md-9">
+									<div class="col-md-8">
 										<div class="form-group">
 											<div class="custom-file">
 												
@@ -122,45 +122,27 @@ foreach($dbState as $key => $value){
 								  
 								
 								<div class="row">
-									<div class="col-md-3">
-									<div class="form-group">
-													<?= $form->field($model, 'first_name')->textInput(['id' => 'first_name']); ?>
-									  </div>
-															</div>
-															<div class="col-md-3">
-																<div class="form-group">
-									<div class="form-group">
-													<?= $form->field($model, 'middle_name')->textInput(['id' => 'middle_name']); ?>
-									  </div>
-																</div>
-
-															</div>
-														</div>
-								  
-								
-								<div class="row">
-									<div class="col-md-3">
-										<div class="form-group">
-											<?= $form->field($model, 'last_name')->textInput(['id' => 'last_name']); ?>
-										</div>
+									<div class="col-md-4">
+									
+										<?= $form->field($model, 'first_name')->textInput(['id' => 'first_name']); ?>
+									  
 									</div>
-									<div class="col-md-3">
-										
-            						<div class="form-group" style="width:100%">
-											<?= $form->field($model, 'gender')->dropDownList(ArrayHelper::map($gender, 'id', 'name'),['class'=>'custom-select']) ?>
-										</div>
-								  		
-										
+									<div class="col-md-4">
+									
+										<?= $form->field($model, 'middle_name')->textInput(['id' => 'middle_name']); ?>
+									  
+									</div>
+									<div class="col-md-4">
+									
+										<?= $form->field($model, 'last_name')->textInput(['id' => 'last_name']); ?>
+									  
 									</div>
 								</div>
 								  
-								
                             
                                
 								<div class="row">
-									<div class="col-md-3">
-										<div class="form-group">
-														
+									<div class="col-md-4">
 											
 											<? echo $form->field($model, 'date_of_birth')->widget(DatePicker::classname(), [
 											'options' => ['placeholder' => 'Enter birth date ...'],
@@ -169,32 +151,32 @@ foreach($dbState as $key => $value){
 												'format' => 'yyyy-mm-dd'
 											]
 										]);?>
-																				  </div>
+									  </div>
+									
+									<div class="col-md-4">
+										<?= $form->field($model, 'gender')->dropDownList(ArrayHelper::map($gender, 'id', 'name'),['class'=>'custom-select']) ?>
 									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<div class="form-group">
-
-												<?= $form->field($model, 'occupation')->textInput(['id' => 'occupation']); ?>
-									  		</div>
-								  		</div>
-										
+									
+									<div class="col-md-4">
+										<?= $form->field($model, 'occupation')->textInput(['id' => 'occupation']); ?>
 									</div>
 								</div>
 								  
 								
 								<div class="row">
+									<div class="col-md-4">
 										
-            <div class="form-group m" style="width:20%">
 											<?= $form->field($model, 'nationality')->dropDownList(ArrayHelper::map($country, 'id', 'name'),['class'=>'custom-select']) ?>
-										</div>
-                                    
-                                    <div class="form-group m" style="width:20%">
+										
+									</div>
+                                    <div class="col-md-4">
+                                    	
 											<?= $form->field($model, 'state_of_origin')->dropDownList(ArrayHelper::map($state, 'id', 'name'),['class'=>'custom-select','id' => 'state']) ?>
-										</div>
+										
+									</div>
                                     
-                                    
-								  		 <div class="form-group m" style="width:20%">
+                                    <div class="col-md-4">
+								  		 
 											
 											
 											 <? echo $form->field($model, 'local_government_of_origin')->widget(DepDrop::classname(), [
@@ -205,7 +187,8 @@ foreach($dbState as $key => $value){
 												 'url' => Url::to(['/applicants/localgov'])
 											 ]
 										 ]); ?>
-										</div>
+										
+									</div>
 								  		
 										
 									</div>
@@ -213,14 +196,18 @@ foreach($dbState as $key => $value){
 								  
 								
 								<div class="row">
-										
-            						<div class="form-group m" style="width:20%">
+									<div class="col-md-4">
+            						
 											<?= $form->field($model, 'marital_status')->dropDownList(ArrayHelper::map($marriage, 'id', 'name'),['class'=>'custom-select']) ?>
-										</div>
-                                    
-                                    <div class="form-group m" style="width:20%">
+										
+									</div>
+                                    <div class="col-md-4">
+                                   
 											<?= $form->field($model, 'highest_education')->dropDownList(ArrayHelper::map($edu, 'id', 'name'),['class'=>'custom-select']) ?>
-										</div>
+										
+									</div>
+									<div class="col-md-4">
+									</div>
                                     
                                     
 								  		 
@@ -255,14 +242,9 @@ foreach($dbState as $key => $value){
   var fileName = $(this).val();
   $(document).find("#customFile").addClass("selected").html('fileName');
 });
-
-
-
-	
-	
 	
 	$('#bio').on('beforeSubmit', function (e) {
-	toastr.info('Proccessing biodata please wait')
+	toastr.info('Processing biodata please wait')
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 

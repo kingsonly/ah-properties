@@ -4,10 +4,12 @@
     -webkit-print-color-adjust: exact !important;   /* Chrome, Safari */
     color-adjust: exact !important;                 /*Firefox*/
 }
+	
+	
 	.receipt{
 				background-image: url('../..../../web/img/backgroundorijo.png');
 				background-size: cover;
-				height: 380px;
+/*				height: 380px;*/
 				padding-left: 30px;
 				padding-right: 30px;
 				padding-top: 19px;
@@ -15,7 +17,7 @@
 			.receiptcopy{
 				background-image: url('../..../../web/img/copy1.png');
 				background-size: cover;
-				height: 380px;
+/*				height: 380px;*/
 				padding-left: 30px;
 				padding-right: 30px;
 				padding-top: 19px;
@@ -23,32 +25,36 @@
 			.receiptcopy2{
 				background-image: url('../..../../web/img/triplicate.png');
 				background-size: cover;
-				height: 380px;
+/*				height: 380px;*/
 				padding-left: 30px;
 				padding-right: 30px;
 				padding-top: 19px;
 			}
 			.receipttitle{
-				font-size: 22px;
 				border: solid 2px #64A893;
 				background: rgba(180, 213, 200,0.6);
 
 				color: #65A985;
 				text-transform: capitalize;
+				width: 80%;
+				font-size: 31px;
+				text-transform: uppercase;
 			}
 			.receipttitlecopy{
-				font-size: 22px;
 				border: solid 2px #D29C87;
 				background: rgba(252, 232, 221,0.6);
-				color: #ccc;
-				text-transform: capitalize;
+				color: #7B7B7B;
+				width: 80%;
+				font-size: 31px;
+				text-transform: uppercase;
 			}
 			.receipttitlecopy2{
-				font-size: 22px;
 				border: solid 2px #98B8B1;
 				background: rgba(244, 243, 241,0.6);
-				color: #CECFD0;
-				text-transform: capitalize
+				color: #7B7B7B;
+				width: 80%;
+				font-size: 31px;
+				text-transform: uppercase;
 			}
 			.originalbox{
 				font-size: 23px;
@@ -93,26 +99,30 @@
 			
 			.innerreceipt{
 				border: solid 2px #869E92;
-/*				width: 98%;*/
+				width: 98%;
 				border-radius: 20px;
 				margin-top: 5px;
-				font-size: 14px;
+				font-size: 15px;
 				color: #36423D;
 				font-family: arial;
+				padding: 8px;
+				margin: 5px auto 5px auto;
 			}
 			
 			.innerreceiptcopy{
 				border: solid 2px #8A9C90;
-/*				width: 98%;*/
+				width: 98%;
 				border-radius: 20px;
-				margin-top: 5px;
-				font-size: 14px;
+				font-size: 15px;
 				color: #36423D;
 				font-family: arial;
+				padding: 8px;
+				margin: 5px auto 5px auto;
 			}
 			
 			.innerreceiptseperator{
 				margin-top: 10px;
+				
 			}
 			
 			.innerbuttomlayer{
@@ -121,6 +131,8 @@
 				text-transform: ;
 				font-style: italic;
 				font-family: arial;
+				width: 97%;
+				margin: 1px auto 1px auto;
 			}
 			.totalinput{
 				border: solid 2px #62B09C;
@@ -156,78 +168,116 @@
 			.refund{
 				text-align: center;
 				text-transform: capitalize;
+				font-size: 13px;
 			}
-			
+	.kdmright{
+		text-align: right;
+	}
+	.aligncenter{
+		text-align: center;
+	}
+	
+	.alignjustify{
+  
+  text-align:justify;
+}
+
+.faketext{
+  background-color:red;
+  width:100%;
+  height:1em;
+  display:inline-block;
+}
+	.totalregion{
+		  width: 97%;
+    margin: 12px auto;
+
+	}
+	.seperator{
+		margin-top: 8px;
+	}
 		</style>
 <!--		content area starts here-->
-		<div class="container-fluid ">
-			<div class="container receipt">
+
+		<div class=" ">
+			<div class=" receipt">
 				<div class="row  ">
 					<div class="col-md-12">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="row">
-									<div class="col-md-4"><img src="img/AHLOGO.png" style="width:50px; height:50px"/></div>
-									<div class="col-md-4">
+									<div class="col-md-2"><img src="img/AHLOGO.png" style="width:50px; height:50px"/></div>
+									<div class="col-md-7">
 										<div class="row">
-											<div class="col-md-3"><img src="img/KDMLOGO.png" style="width:50px; height:50px"/></div>
-											<div class="col-md-9 receipttitle">Kafe District Market</div>
+											<div class="col-md-2 kdmright"><img src="img/KDMLOGO.png" style="width:50px; height:50px"/></div>
+											<div class="col-md-10 ">
+												<div class="receipttitle aligncenter"> Kafe District Market</div>
+												
+											</div>
 										</div>
 										
 									</div>
-									<div class="col-md-4 originalbox">ORIGINAL</div>
+									<div class="col-md-3 originalbox">ORIGINAL</div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
 								<div class="row" style="margin-top: 4px;">
-									<div class="col-md-4"><img src="img/AICLLOGO.png" style="width:50px; height:50px"/></div>
-									<div class="col-md-4 officialrecipt">Official Receipt</div>
-									<div class="col-md-4 receiptid"><?= $modelKdmPayment->receit_id ; ?></div>
+									<div class="col-md-2"><img src="img/AICLLOGO.png" style="width:50px; height:50px"/></div>
+									<div class="col-md-7 officialrecipt aligncenter">Official Receipt</div>
+									<div class="col-md-3 receiptid"><?= $modelKdmPayment->receit_id ; ?></div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container innerreceipt">
+								<div class=" innerreceipt">
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Customer Id: <strong><?= $modelBio->applicant_id?></strong></div>
+										<div class="col-md-4">Customer ID: <strong><?= $modelKdmPayment->filenumber->file_number;?></strong></div>
 										<div class="col-md-4">Payment Mode/ Revenue Code: <strong><?= $modelKdmPayment->payment_mode; ?></strong></div>
 										<div class="col-md-4">Payment Date: <strong><?= $modelKdmPayment->payment_date; ?></strong></div>
 									</div>
 									
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Payment Id:<strong><?= $modelKdmPayment->payment_id; ?></strong></div>
+										<div class="col-md-4">Payment ID:<strong><?= $modelKdmPayment->payment_id; ?></strong></div>
 										<div class="col-md-4">Bank Branch/ Channel: <strong><?= $modelKdmPayment->bank_branch; ?></strong></div>
 										<div class="col-md-4">Receipt Date: <strong><?= $modelKdmPayment->receipt_date; ?></strong></div>
 									</div>
 									
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Bill Reff Id: <strong><?= $modelKdmPayment->bill_reff; ?></strong></div>
-										<div class="col-md-4">Name Of Depositor:<strong><?= $modelBio->last_name.' '.$modelBio->first_name;?></strong></div>
-										<div class="col-md-4">Teller/Deposite No:<strong><?= $modelKdmPayment->teller_number; ?></strong></div>
+										<div class="col-md-4">Bill Ref ID: <strong><?= $modelKdmPayment->bill_reff; ?></strong></div>
+										<div class="col-md-4">Name Of Depositor:<strong><? if($rootModel->applicant_type == 1){
+											echo $modelBio->last_name.' '.$modelBio->first_name;
+										}else{
+											echo  $modelBio->organization_name;
+										}?></strong></div>
+										<div class="col-md-4">Teller/Deposit No:<strong><?= $modelKdmPayment->teller_number; ?></strong></div>
 									</div>
 								</div>
 							</div>
 							
-							<div class="col-md-12">
-								<div class="container innerbuttomlayer">
+							<div class="col-md-12 ">
+								<div class=" innerbuttomlayer">
 									<div class="row">
-										<div class="col-md-12">Recieved the sum of: <strong><?= $modelKdmPayment->amount_word; ?></strong></div>
+										<div class="col-md-12">Received the sum of: <strong><?= $modelKdmPayment->amount_word; ?></strong></div>
 										
 									</div>
 									<div class="row">
-										<div class="col-md-12">From: <strong><?= $modelBio->last_name.' '.$modelBio->first_name;?></strong></div>
+										<div class="col-md-12">From: <strong><? if($rootModel->applicant_type == 1){
+											echo $modelBio->last_name.' '.$modelBio->first_name;
+										}else{
+											echo  $modelBio->organization_name;
+										}?></strong></div>
 										
 									</div>
 									<div class="row">
-										<div class="col-md-12">Beign Payment For: <strong><?= $modelKdmPayment->payment_for; ?></strong></div>
+										<div class="col-md-12">Being Payment For <strong><?= $modelKdmPayment->payment_for; ?></strong></div>
 										
 									</div>
 								</div>
 							</div>
 							
-							<div class="col-md-12">
-								<div class="container" style="margin-top: 5px;">
+							<div class="col-md-12 ">
+								<div class="totalregion" >
 									<div class="row">
 										<div class="col-md-6">
 											
@@ -251,7 +301,7 @@
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container">
+								<div class="">
 									<div class="row">
 										
 										<div class="col-md-6">
@@ -272,80 +322,91 @@
 		</div> 
 		
 		
-		<div class="container-fluid ">
-			<div class="container receiptcopy">
+		<div class="seperator ">
+			<div class=" receiptcopy">
 				<div class="row  ">
 					<div class="col-md-12">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="row">
-									<div class="col-md-4"><img src="img/AHLOGO.png" style="width:50px; height:50px"/></div>
-									<div class="col-md-4">
+									<div class="col-md-2"><img src="img/AHLOGO.png" style="width:50px; height:50px"/></div>
+									<div class="col-md-7">
 										<div class="row">
-											<div class="col-md-3"><img src="img/KDMLOGO.png" style="width:50px; height:50px"/></div>
-											<div class="col-md-9 receipttitlecopy">Kafe District Market</div>
+											<div class="col-md-2 kdmright"><img src="img/KDMLOGO.png" style="width:50px; height:50px"/></div>
+											<div class="col-md-10 ">
+												<div class="receipttitlecopy aligncenter">Kafe District Market</div>
+											</div>
 										</div>
 										
 									</div>
-									<div class="col-md-4 originalbox">DUPLICATE</div>
+									<div class="col-md-3 originalbox">DUPLICATE</div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
 								<div class="row" style="margin-top: 4px;">
-									<div class="col-md-4"><img src="img/AICLLOGO.png" style="width:50px; height:50px"/></div>
-									<div class="col-md-4 officialreciptcopy">Official Receipt</div>
-									<div class="col-md-4 receiptid"><?= $modelKdmPayment->receit_id ; ?></div>
+									<div class="col-md-2"><img src="img/AICLLOGO.png" style="width:50px; height:50px"/></div>
+									<div class="col-md-7 officialreciptcopy aligncenter">Official Receipt</div>
+									<div class="col-md-3 receiptid"><?= $modelKdmPayment->receit_id ; ?></div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container innerreceiptcopy">
+								<div class=" innerreceiptcopy">
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Customer Id: <strong><?= $modelBio->applicant_id?></strong></div>
+										<div class="col-md-4">Customer ID: <strong><?= $modelKdmPayment->filenumber->file_number;?></strong></div>
 										<div class="col-md-4">Payment Mode/ Revenue Code:<strong><?= $modelKdmPayment->payment_mode; ?></strong></div>
 										<div class="col-md-4">Payment Date:<strong><?= $modelKdmPayment->payment_date; ?></strong></div>
 									</div>
 									
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Payment Id: <strong><?= $modelKdmPayment->payment_id; ?></strong></div>
+										<div class="col-md-4">Payment ID: <strong><?= $modelKdmPayment->payment_id; ?></strong></div>
 										<div class="col-md-4">Bank Branch/ Channel:<strong><?= $modelKdmPayment->bank_branch; ?></strong></div>
-										<div class="col-md-4">Recipt Date: <strong><?= $modelKdmPayment->receipt_date; ?></strong></div>
+										<div class="col-md-4">Receipt Date: <strong><?= $modelKdmPayment->receipt_date; ?></strong></div>
 									</div>
 									
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Bill Reff Id: <strong><?= $modelKdmPayment->bill_reff; ?></strong></div>
-										<div class="col-md-4">Name Of Depositor:<?= $modelBio->last_name.' '.$modelBio->first_name;?></strong></div>
-										<div class="col-md-4">Teller/Deposite No:<strong><?= $modelKdmPayment->teller_number; ?></strong></div>
+										<div class="col-md-4">Bill Ref ID: <strong><?= $modelKdmPayment->bill_reff; ?></strong></div>
+										<div class="col-md-4">Name Of Depositor:<strong>
+											<? if($rootModel->applicant_type == 1){
+											echo $modelBio->last_name.' '.$modelBio->first_name;
+										}else{
+											echo  $modelBio->organization_name;
+										}?></strong></div>
+										<div class="col-md-4">Teller/Deposit No:<strong><?= $modelKdmPayment->teller_number; ?></strong></div>
 									</div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container innerbuttomlayer">
+								<div class=" innerbuttomlayer">
 									<div class="row">
-										<div class="col-md-12">Recieved the sum of: <strong><?= $modelKdmPayment->amount_word; ?></strong></div>
+										<div class="col-md-12">Received the sum of: <strong><?= $modelKdmPayment->amount_word; ?></strong></div>
 										
 									</div>
 									<div class="row">
-										<div class="col-md-12">From:<strong><?= $modelBio->last_name.' '.$modelBio->first_name;?></strong></div>
+										<div class="col-md-12">From:<strong><? if($rootModel->applicant_type == 1){
+											echo $modelBio->last_name.' '.$modelBio->first_name;
+										}else{
+											echo  $modelBio->organization_name;
+										}?></strong></div>
 										
 									</div>
 									<div class="row">
-										<div class="col-md-12">Beign Payment For:<strong><?= $modelKdmPayment->payment_for; ?></strong></div>
+										<div class="col-md-12">Being Payment For<strong><?= $modelKdmPayment->payment_for; ?></strong></div>
 										
 									</div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container" style="margin-top: 5px;">
+								<div class="totalregion" >
 									<div class="row">
 										<div class="col-md-6">
 											
 											<div class="row">
 											<div class="col-md-1" style="font-size: 30px;">₦</div>
-											<div class="col-md-11 totalinputcopy"><?= $modelKdmPayment->amount; ?></div>
+												<div class="col-md-11 totalinputcopy"><strong><?= $modelKdmPayment->amount; ?></strong></div>
 											</div>
 										
 										</div>
@@ -363,7 +424,7 @@
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container">
+								<div class="">
 									<div class="row">
 										
 										<div class="col-md-6">
@@ -391,80 +452,91 @@
 
 
 
-<div class="container-fluid ">
-			<div class="container receiptcopy2">
+<div class="seperator">
+			<div class=" receiptcopy2">
 				<div class="row  ">
 					<div class="col-md-12">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="row">
-									<div class="col-md-4"><img src="img/AHLOGO.png" style="width:50px; height:50px"/></div>
-									<div class="col-md-4">
+									<div class="col-md-2"><img src="img/AHLOGO.png" style="width:50px; height:50px"/></div>
+									<div class="col-md-7">
 										<div class="row">
-											<div class="col-md-3"><img src="img/KDMLOGO.png" style="width:50px; height:50px"/></div>
-											<div class="col-md-9 receipttitlecopy2">Kafe District Market</div>
+											<div class="col-md-2 kdmright"><img src="img/KDMLOGO.png" style="width:50px; height:50px"/></div>
+											<div class="col-md-10">
+												<div class="aligncenter receipttitlecopy2">Kafe District Market</div>
+											</div>
 										</div>
 										
 									</div>
-									<div class="col-md-4 originalbox">TRIPLICATE</div>
+									<div class="col-md-3 originalbox">TRIPLICATE</div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
 								<div class="row" style="margin-top: 4px;">
-									<div class="col-md-4"><img src="img/AICLLOGO.png" style="width:50px; height:50px"/></div>
-									<div class="col-md-4 officialreciptcopy2">Official Receipt</div>
-									<div class="col-md-4 receiptid"><?= $modelKdmPayment->receit_id ; ?></div>
+									<div class="col-md-2"><img src="img/AICLLOGO.png" style="width:50px; height:50px"/></div>
+									<div class="col-md-7 officialreciptcopy2 aligncenter ">Official Receipt</div>
+									<div class="col-md-3 receiptid"><?= $modelKdmPayment->receit_id ; ?></div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container innerreceiptcopy">
+								<div class=" innerreceiptcopy">
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Customer Id: <strong><?= $modelBio->applicant_id?></strong></div>
+										<div class="col-md-4">Customer ID: <strong><?= $modelKdmPayment->filenumber->file_number;?></strong></div>
 										<div class="col-md-4">Payment Mode/ Revenue Code:<strong><?= $modelKdmPayment->payment_mode; ?></strong></div>
 										<div class="col-md-4">Payment Date:<strong><?= $modelKdmPayment->payment_date; ?></strong></div>
 									</div>
 									
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Payment Id: <strong><?= $modelKdmPayment->payment_id; ?></strong></div>
+										<div class="col-md-4">Payment ID: <strong><?= $modelKdmPayment->payment_id; ?></strong></div>
 										<div class="col-md-4">Bank Branch/ Channel:<strong><?= $modelKdmPayment->bank_branch; ?></strong></div>
-										<div class="col-md-4">Recipt Date: <strong><?= $modelKdmPayment->receipt_date; ?></strong></div>
+										<div class="col-md-4">Receipt Date: <strong><?= $modelKdmPayment->receipt_date; ?></strong></div>
 									</div>
 									
 									<div class="row innerreceiptseperator">
-										<div class="col-md-4">Bill Reff Id: <strong><?= $modelKdmPayment->bill_reff; ?></strong></div>
-										<div class="col-md-4">Name Of Depositor:<?= $modelBio->last_name.' '.$modelBio->first_name;?></strong></div>
-										<div class="col-md-4">Teller/Deposite No:<strong><?= $modelKdmPayment->teller_number; ?></strong></div>
+										<div class="col-md-4">Bill Ref ID: <strong><?= $modelKdmPayment->bill_reff; ?></strong></div>
+										<div class="col-md-4">Name Of Depositor:<strong>
+											<? if($rootModel->applicant_type == 1){
+											echo $modelBio->last_name.' '.$modelBio->first_name;
+										}else{
+											echo  $modelBio->organization_name;
+										}?></strong></div>
+										<div class="col-md-4">Teller/Deposit No:<strong><?= $modelKdmPayment->teller_number; ?></strong></div>
 									</div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container innerbuttomlayer">
+								<div class=" innerbuttomlayer">
 									<div class="row">
-										<div class="col-md-12">Recieved the sum of: <strong><?= $modelKdmPayment->amount_word; ?></strong></div>
+										<div class="col-md-12">Received the sum of: <strong><?= $modelKdmPayment->amount_word; ?></strong></div>
 										
 									</div>
 									<div class="row">
-										<div class="col-md-12">From:<strong><?= $modelBio->last_name.' '.$modelBio->first_name;?></strong></div>
+										<div class="col-md-12">From:<strong><? if($rootModel->applicant_type == 1){
+											echo $modelBio->last_name.' '.$modelBio->first_name;
+										}else{
+											echo  $modelBio->organization_name;
+										}?></strong></div>
 										
 									</div>
 									<div class="row">
-										<div class="col-md-12">Beign Payment For:<strong><?= $modelKdmPayment->payment_for; ?></strong></div>
+										<div class="col-md-12">Being Payment For<strong><?= $modelKdmPayment->payment_for; ?></strong></div>
 										
 									</div>
 								</div>
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container" style="margin-top: 5px;">
+								<div class="totalregion" >
 									<div class="row">
 										<div class="col-md-6">
 											
 											<div class="row">
 											<div class="col-md-1" style="font-size: 30px;">₦</div>
-											<div class="col-md-11 totalinputcopy2"><?= $modelKdmPayment->amount; ?></div>
+												<div class="col-md-11 totalinputcopy2"><strong><?= $modelKdmPayment->amount; ?></strong></div>
 											</div>
 										
 										</div>
@@ -482,7 +554,7 @@
 							</div>
 							
 							<div class="col-md-12">
-								<div class="container">
+								<div class="">
 									<div class="row">
 										
 										<div class="col-md-6">

@@ -13,8 +13,8 @@ $identification =[
 	'name' =>'International Passport',
 	],
 	[
-	'id' =>'National Id',
-	'name' =>'National Id',
+	'id' =>'National ID',
+	'name' =>'National ID',
 	],
 	[
 	'id' =>'Permanent Voters Card',
@@ -64,10 +64,12 @@ $identification =[
 														</div>
 														<div class="col-md-8">
 															
-															<div class="form-group">
-																<?= $form->field($model, 'imageFile',['template' => "{label}\n<div class='col-md-6'>{input}</div>\n{hint}\n{error}",
+															
+														    <div class="custom-file">
+												
+												<?= $form->field($model, 'imageFile',['template' => "{label}\n<div class='col-md-6'>{input}</div>\n{hint}\n{error}",
                     'labelOptions' => [ 'class' => 'custom-file-label' ]])->fileInput(['class'=>'customFile']) ?>
-														    </div>
+    										</div>
 
 														</div>
 														

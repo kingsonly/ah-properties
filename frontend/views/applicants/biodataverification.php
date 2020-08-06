@@ -61,7 +61,7 @@ $verificationModel = new VerificationModel();
 																
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Nationality</h6>
-																	<h5><?= $model->nationality; ?></h5>
+																	<h5><?= $model->countrys->name; ?></h5>
 																</div>
 																
 														    </div>
@@ -69,12 +69,12 @@ $verificationModel = new VerificationModel();
 															<div class="row">
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">State</h6>
-																	<h5><?= $model->state_of_origin; ?></h5>
+																	<h5><?= $model->states->name; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Local Government</h6>
-																	<h5><?= $model->local_government_of_origin; ?></h5>
+																	<h5><?= $model->lga->name; ?></h5>
 																</div>
 																
 																<div class="col-md-3 " >
@@ -99,25 +99,25 @@ $verificationModel = new VerificationModel();
 												 
 											</div>
 											<div class="col-md-3 ">
-												<?= Html::img('@web/'.$model->image, ['alt' => 'My logo','class'=>'medium_image']) ?>
-												<h4><?= $model->applicant_id?></h4>
+												<?= Html::img('@web/'.$model->image, ['alt' => 'My logo','class'=>'medium_image img-width-inherit']) ?>
+												
 											</div>
 												
 											
 								</div>
 												
 											<?php $form = ActiveForm::begin(['id' => 'bioveri']); ?>
-											<div class="row ">
+											<div class="row mar-t-10" >
 														
 														<div class="col-md-1">
-													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => '','id' => 'customCheck'])->label(false); ?>
+													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => 'customcheck','id' => 'customCheck'])->label(false); ?>
 																	
 												</div>
-												<div class="col-md-9">
+												<div class="col-md-8">
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
-												<div class="col-md-2"></div>
+												<div class="col-md-4"></div>
 												
 													</div>
 										<?php ActiveForm::end(); ?>
@@ -132,7 +132,7 @@ $verificationModel = new VerificationModel();
 	
 		
 	$('#bioveri').on('beforeSubmit', function (e) {
-	toastr.info('Proccessing Contact details please wait')
+	toastr.info('Processing')
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 
@@ -151,7 +151,7 @@ $verificationModel = new VerificationModel();
 				$(document).find('#renderapplicationform').load('$loadContact'+'&id='+newData.applicant_id);
 				$(document).find('.list-group-item').removeClass('active');
 				$(document).find('#nextofkin').addClass('active')
-				toastr.success('Contact Saved')
+				toastr.success('Saved')
 			}else{
 				alert('Please confirm your data to make sure values are correct')
 			}

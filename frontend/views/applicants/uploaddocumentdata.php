@@ -13,8 +13,8 @@ $identification =[
 	'name' =>'International Passport',
 	],
 	[
-	'id' =>'National Id',
-	'name' =>'National Id',
+	'id' =>'National ID',
+	'name' =>'National ID',
 	],
 	[
 	'id' =>'Permanent Voters Card',
@@ -29,14 +29,6 @@ $identification =[
 <!--							form content goes here-->
 							 <div class="row">
 									<div class="col-md-9">
-										<div class="row">
-											<div class="col-md-12">
-												<h6 class="header-text-color">ID</h6>
-												<h5><?= $bioData->applicant_id;?></h5>
-											
-											</div>
-										
-										</div>
 										
 										<div class="row">
 											<div class="col-md-12">
@@ -101,15 +93,16 @@ $identification =[
 												
 													<div class="row">
 														<div class="col-md-4">
-															<div class="form-group">
+															
 																<?= $form->field($model, 'document_type')->dropDownList(ArrayHelper::map($identification, 'id', 'name'),['class'=>'custom-select']) ?>
-														    </div>
+														    
 														</div>
 														<div class="col-md-8">
-															<div class="form-group">
+								
+															<div class="custom-file">
 																<?= $form->field($model, 'imageFile',['template' => "{label}\n<div class='col-md-6'>{input}</div>\n{hint}\n{error}",
                     'labelOptions' => [ 'class' => 'custom-file-label' ]])->fileInput(['class'=>'customFile']) ?>
-														    </div>
+															</div>
 
 														</div>
 														

@@ -103,7 +103,7 @@ $gender =[
 		
 		
 
-		<div class="row" >
+		<div class="row mar-t-10" >
 			
 
 			<div class="col-md-5">

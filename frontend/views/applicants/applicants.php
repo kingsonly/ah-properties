@@ -20,6 +20,9 @@ use yii\widgets\ActiveForm;
 	.active a{
 		color:#56ABE9 !important;
 	}
+	.tab-content{
+		padding-top: 40px !important;
+	}
 </style>
 
 						
@@ -44,7 +47,7 @@ use yii\widgets\ActiveForm;
 									  </li>
 									
 									<li class="nav-item">
-										<a class="nav-link" data-toggle="tab" href="#pending">Pennding</a>
+										<a class="nav-link" data-toggle="tab" href="#pending">Pending</a>
 									  </li>
 									</ul>
 
@@ -113,7 +116,7 @@ use yii\widgets\ActiveForm;
 														</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assing A Space</button>
+													<button class="btn btn-success">Assign a Space</button>
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>
@@ -197,7 +200,7 @@ use yii\widgets\ActiveForm;
 													<button class="btn btn-primary">Start Verification</button>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assing A Space</button>
+													<button class="btn btn-success">Assign a Space</button>
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>
@@ -285,7 +288,7 @@ use yii\widgets\ActiveForm;
 													</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assing A Space</button>
+													<button class="btn btn-success">Assign a Space</button>
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>
@@ -370,7 +373,7 @@ use yii\widgets\ActiveForm;
 													</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assing A Space</button>
+													<button class="btn btn-success">Assign a Space</button>
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>

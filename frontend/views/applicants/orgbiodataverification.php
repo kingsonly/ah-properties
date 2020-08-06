@@ -22,19 +22,19 @@ $verificationModel = new VerificationModel();
 													</div>
 													<div class="col-md-6 " >
 														<h6 class="header-text-color">organization Country </h6>
-														<h5><?= $model->organization_country ?></h5>
+														<h5><?= $model->countrys->name ?></h5>
 													</div>
 												</div>
 
 												<div class="row">
 													<div class="col-md-6 " >
 														<h6 class="header-text-color"> organization state </h6>
-														<h5><?= $model->organization_state ; ?></h5>
+														<h5><?= $model->states->name ; ?></h5>
 													</div>
 
 													<div class="col-md-6 " >
 														<h6 class="header-text-color">organization local government</h6>
-														<h5><?= $model->organization_local_government ?></h5>
+														<h5><?= $model->lga->name ?></h5>
 													</div>
 
 												</div>
@@ -47,17 +47,17 @@ $verificationModel = new VerificationModel();
 											</div>
 												
 											<?php $form = ActiveForm::begin(['id' => 'bioveri']); ?>
-											<div class="row ">
+											<div class="row mar-t-10 ">
 														
 														<div class="col-md-1">
 													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => '','id' => 'customCheck'])->label(false); ?>
 																	
 												</div>
-												<div class="col-md-9">
+												<div class="col-md-11">
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
-												<div class="col-md-2"></div>
+												
 												
 													</div>
 										<?php ActiveForm::end(); ?>

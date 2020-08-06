@@ -46,14 +46,7 @@ foreach($dbState as $key => $value){
 <!--							form content goes here-->
 							 <div class="row">
 									<div class="col-md-9">
-										<div class="row">
-											<div class="col-md-12">
-												<h6 class="header-text-color">ID</h6>
-												<h5><?= $bioData->applicant_id;?></h5>
-											
-											</div>
 										
-										</div>
 										
 										<div class="row">
 											<div class="col-md-12">

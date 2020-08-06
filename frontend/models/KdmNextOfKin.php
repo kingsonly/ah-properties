@@ -67,4 +67,19 @@ class KdmNextOfKin extends \yii\db\ActiveRecord
             'country' => 'Country',
         ];
     }
+	
+	public function getStates(){
+
+		return $this->hasOne(KdmState::className(), ['id' => 'state']);
+	}
+	
+	public function getCountrys(){
+
+		return $this->hasOne(KdmCountry::className(), ['id' => 'country']);
+	}
+	
+	public function getLga(){
+
+		return $this->hasOne(KdmCities::className(), ['id' => 'city']);
+	}
 }

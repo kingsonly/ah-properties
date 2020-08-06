@@ -31,7 +31,7 @@ class KdmApplicantOrganizationBio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['applicant_id', 'organization_name', 'organization_country', 'organization_state', 'organization_local_government', 'status'], 'required'],
+            [['applicant_id', 'organization_name', 'organization_country', 'organization_state',  'status'], 'required'],
             [['status'], 'integer'],
             [['applicant_id', 'organization_country', 'organization_state', 'organization_local_government'], 'string', 'max' => 255],
             [['organization_name'], 'string', 'max' => 300],
@@ -47,10 +47,22 @@ class KdmApplicantOrganizationBio extends \yii\db\ActiveRecord
             'id' => 'ID',
             'applicant_id' => 'Applicant ID',
             'organization_name' => 'Organization Name',
-            'organization_country' => 'Organization Country',
-            'organization_state' => 'Organization State',
-            'organization_local_government' => 'Organization Local Government',
+            'organization_country' => 'Country',
+            'organization_state' => 'State',
+            'organization_local_government' => 'LGA',
             'status' => 'Status',
         ];
     }
+	
+	public function getStates(){
+
+		return $this->hasOne(KdmState::className(), ['id' => 'organization_state']);
+	}
+	
+	public function getCountrys(){
+
+		return $this->hasOne(KdmCountry::className(), ['id' => 'organization_country']);
+	}
+	
+	
 }

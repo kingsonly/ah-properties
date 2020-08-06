@@ -46,4 +46,9 @@ class KdmApplicantFileNumber extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+	
+	public function getPayments(){
+		return $this->hasMany(KdmPayment::className(), ['file_number_id' => 'id']);
+	}
+	
 }
