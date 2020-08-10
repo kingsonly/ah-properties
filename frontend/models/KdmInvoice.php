@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 
 /**
+
  * This is the model class for table "kdm_invoice".
  *
  * @property int $id
@@ -56,6 +57,7 @@ class KdmInvoice extends \yii\db\ActiveRecord
             'link' => 'Link',
         ];
     }
+
 	
 	public function getShop(){
 
