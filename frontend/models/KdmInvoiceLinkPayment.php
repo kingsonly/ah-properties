@@ -30,7 +30,7 @@ class KdmInvoiceLinkPayment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['invoice_id', 'payment_id', 'amount', 'date_paid', 'status'], 'required'],
+            [['invoice_id', 'payment_id', 'amount', 'date_paid','user_id'], 'required'],
             [['invoice_id', 'payment_id', 'amount', 'status'], 'integer'],
             [['date_paid'], 'safe'],
         ];

@@ -71,4 +71,10 @@ class KdmInvoice extends \yii\db\ActiveRecord
 
 		return $this->hasMany(KdmInvoiceLinkPayment::className(), ['invoice_id' => 'id']);
 	}
+	
+	public function getSumpayment(){
+
+		return $this->hasMany(KdmPayment::className(), ['file_number_id' => 'file_no'  ])->andWhere(['payment_for' => 'space allocation'])->sum('amount');
+	}
+	
 }

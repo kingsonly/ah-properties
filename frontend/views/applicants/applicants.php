@@ -116,7 +116,8 @@ use yii\widgets\ActiveForm;
 														</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assign a Space</button>
+													<a href="<?= Url::to(['applicants/applicantfileview','id' => $allValue->id])?>"> <button class="btn btn-success">Assign a Space</button></a>
+													
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>
@@ -200,7 +201,8 @@ use yii\widgets\ActiveForm;
 													<button class="btn btn-primary">Start Verification</button>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assign a Space</button>
+													<a href="<?= Url::to(['applicants/applicantfileview','id' => $allValue->id])?>"> <button class="btn btn-success">Assign a Space</button></a>
+													
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>
@@ -288,7 +290,8 @@ use yii\widgets\ActiveForm;
 													</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assign a Space</button>
+													<a href="<?= Url::to(['applicants/applicantfileview','id' => $allValue->id])?>"> <button class="btn btn-success">Assign a Space</button></a>
+													
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>
@@ -373,7 +376,8 @@ use yii\widgets\ActiveForm;
 													</a>
 													<? }?>
 													<? if($allValue->status == 3){?>
-													<button class="btn btn-success">Assign a Space</button>
+													<a href="<?= Url::to(['applicants/applicantfileview','id' => $allValue->id])?>"> <button class="btn btn-success">Assign a Space</button></a>
+													
 													<? }?>
 													<? if($allValue->status == 4){?>
 													<button class="btn btn-default">Declined</button>

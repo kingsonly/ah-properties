@@ -26,9 +26,18 @@ use frontend\models\KdmApplicantFileNumber;
 use frontend\models\KdmApplicantOrganizationBio;
 use frontend\models\KdmOrganizationContactDetails;
 use frontend\models\KdmDeclaration;
+use frontend\models\KdmSpaceBooking;
 use frontend\models\KdmCities;
+use frontend\models\KdmShop;
+use frontend\models\KdmBlock;
+use frontend\models\KdmQuadrant;
+use frontend\models\KdmSpaceType;
+use frontend\models\KdmInvoice;
+use frontend\models\KdmInvoiceLinkPayment;
+use frontend\models\KdmFloor;
 use frontend\models\Config;
 use frontend\models\KdmApplicantOrganizationContactPersonDetails;
+use frontend\models\BookingModel;
 use common\models\User;
 use yii\web\UploadedFile;
 use yii\base\Model;
@@ -131,6 +140,41 @@ class ApplicantsController extends Controller
 		$model = KdmApplicantOrganizationBio::find()->andWhere(['applicant_id' => $id])->one();
 		return $this->renderAjax('orgbiodataverification', [
 			'model' => $model,
+            ]);
+	}
+	
+	
+	public function actionSpacebooking($id=null){
+		
+		$model = new BookingModel();
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		// Check booking model to confirm if space have been booked for this file 
+		$bookingModel = KdmSpaceBooking::find()->andWhere(['file_id' => $id])->one();
+		return $this->renderAjax('spacebooking', [
+			'model' => $model,
+			'bookingModel' =>$bookingModel,
+			'FileModel' =>$FileModel,
+            ]);
+	}
+	
+	
+	public function actionInvoice($id=null){
+		
+		$model = KdmInvoice::find()->andWhere(['file_no' => $id])->one();
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		return $this->renderAjax('invoice', [
+			'model' => $model,
+			'FileModel' =>$FileModel,
+            ]);
+	}
+	
+	public function actionFolderpayments($id=null){
+		
+		$model = new KdmPayment();
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		return $this->renderAjax('folderpayments', [
+			'model' => $model,
+			'FileModel' =>$FileModel,
             ]);
 	}
 	
@@ -368,6 +412,107 @@ class ApplicantsController extends Controller
 			'modelContactPersonBio' => $modelContactPersonBio,
 			'modelContactBio' => $modelContactBio,
 			'rootModel' => $rootModel,
+                
+            ]);
+		}
+		
+		
+		
+		
+    }
+	
+	public function actionApplicantfileview($id)
+    {
+
+		
+		$this->layout = 'preview';
+		$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$id])->one();
+		$modelKdmDocumentUpload = KdmDocumentUpload::find()->andWhere(['applicant_id' => $id])->all();
+		
+		$modelKdmPayment = KdmPayment::find()->andWhere(['applicant_id' => $id])->all();
+
+      
+		
+		$modelKdmApplicantAgent = KdmApplicantAgent::find()->andWhere(['applicant_id' => $id])->one();
+		
+		$modelKdmUser = User::find()->andWhere(['id' => $rootModel->user_id])->one();
+		if($rootModel->applicant_type == 1){
+			$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $id])->one();
+		
+			$modelKdmContactDetails = KdmContactDetails::find()->andWhere(['applicant_id' => $id])->one();
+
+			$modelKdmNextOfKin = KdmNextOfKin::find()->andWhere(['applicant_id' => $id])->one();
+		}else{
+			$modelBio = KdmApplicantOrganizationBio::find()->andWhere(['applicant_id' => $id])->one();
+			$modelContactPersonBio = KdmApplicantOrganizationContactPersonDetails::find()->andWhere(['applicant_id' => $id])->one();
+			$modelContactBio = KdmOrganizationContactDetails::find()->andWhere(['applicant_id' => $id])->one();
+		}
+		
+		
+		
+		
+		if($rootModel->applicant_type == 1){
+			return $this->render('applicantfileview', [
+			'modelBio' => $modelBio,
+			'modelKdmContactDetails' => $modelKdmContactDetails,
+			'modelKdmNextOfKin' => $modelKdmNextOfKin,
+			'modelKdmDocumentUpload' => $modelKdmDocumentUpload,
+			'modelKdmPayment' => $modelKdmPayment,
+			'modelKdmApplicantAgent' => $modelKdmApplicantAgent,
+			'modelKdmUser' => $modelKdmUser,
+			'rootModel' => $rootModel,
+                
+            ]);
+		}else{
+			return $this->render('applicantfileview', [
+			'modelBio' => $modelBio,
+			'modelKdmDocumentUpload' => $modelKdmDocumentUpload,
+			'modelKdmPayment' => $modelKdmPayment,
+			'modelKdmApplicantAgent' => $modelKdmApplicantAgent,
+			'modelKdmUser' => $modelKdmUser,
+			'modelContactPersonBio' => $modelContactPersonBio,
+			'modelContactBio' => $modelContactBio,
+			'rootModel' => $rootModel,
+                
+            ]);
+		}
+		
+		
+		
+		
+    }
+	
+	public function actionApplicantfiledashboard($id)
+    {
+
+		
+		$this->layout = 'preview';
+		$model = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$model->applicant_id])->one();
+		
+		
+		if($rootModel->applicant_type == 1){
+			$modelBio = KdmApplicantBioData::find()->andWhere(['applicant_id' => $rootModel->id])->one();
+		
+		}else{
+			$modelBio = KdmApplicantOrganizationBio::find()->andWhere(['applicant_id' => $rootModel->id])->one();
+		}
+		
+		
+		
+		
+		if($rootModel->applicant_type == 1){
+			return $this->render('applicantfiledashboard', [
+			'modelBio' => $modelBio,
+			'rootModel' => $rootModel,
+			'model' => $model,
+                
+            ]);
+		}else{
+			return $this->render('applicantfiledashboard', [
+			'modelBio' => $modelBio,
+			'rootModel' => $rootModel,
+				'model' => $model,
                 
             ]);
 		}
@@ -631,9 +776,7 @@ class ApplicantsController extends Controller
             ]);
     }
 	
-	
-	
-	
+
 	public function actionUploaddocumentdata($id)
     {
 		$bioData = KdmApplicantBioData::find()->andWhere(['applicant_id' => $id])->one();
@@ -665,6 +808,20 @@ class ApplicantsController extends Controller
 			'fileNumberModel' => $fileNumberModel,
 			'modelBio' => $modelBio,
                 
+            ]);
+    }
+	
+		public function actionFilepaymentdata($id,$invoice)
+    {
+		
+		$fileNumberModel = KdmApplicantFileNumber::find()->andWhere(['id' => $id])->one();
+		
+		$model = new KdmPayment();
+		
+		return $this->renderAjax('filepaymentdata', [
+			'model' => $model,
+			'fileNumberModel' => $fileNumberModel,
+			'invoice' => $invoice,
             ]);
     }
 	
@@ -1531,7 +1688,291 @@ class ApplicantsController extends Controller
          }
         
     }
+	
+	public function actionGettype() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
 
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$getShops  = KdmShop::find()->select(['space_type_id'])->andWhere(['space_id' => $shop_id,'status'=>0,'reserved'=>0])->asArray()->all();
+
+				$shopTypeIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopTypeIdValue,$value['space_type_id']);
+				}
+
+				$newShopTypeId = array_unique($shopTypeIdValue);
+				$shopTypeId = array_values($newShopTypeId);
+				$getAvailableTypes = KdmSpaceType::findAll($shopTypeId);
+				$out = $getAvailableTypes;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetquadrant() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$getShops  = KdmShop::find()->select(['quadrant_id'])->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'status'=>0,'reserved'=>0])->asArray()->all();
+
+				$shopQuadrantIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopQuadrantIdValue,$value['quadrant_id']);
+				}
+
+				$newShopQuadrantId = array_unique($shopQuadrantIdValue);
+				$shopQuadrantId = array_values($newShopQuadrantId);
+				$getAvailableQuadrant = KdmQuadrant::findAll($shopQuadrantId);
+				$out = $getAvailableQuadrant;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetblock() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$quadrant_id = $parents[2];
+				$getShops  = KdmShop::find()->select(['block_id'])->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'quadrant_id'=>$quadrant_id,'status'=>0,'reserved'=>0])->asArray()->all();
+
+				$shopBlockIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopBlockIdValue,$value['block_id']);
+				}
+
+				$newShopBlockId = array_unique($shopBlockIdValue);
+				$shopBlockId = array_values($newShopBlockId);
+				$getAvailableBlock = KdmBlock::findAll($shopBlockId);
+				$out = $getAvailableBlock;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetfloor() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$quadrant_id = $parents[2];
+				$block_id = $parents[3];
+				$getShops  = KdmShop::find()->select(['floor_id'])->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'quadrant_id'=>$quadrant_id,'block_id'=>$block_id,'status'=>0,'reserved'=>0])->asArray()->all();
+
+				$shopFloorIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopFloorIdValue,$value['floor_id']);
+				}
+
+				$newShopFloorId = array_unique($shopFloorIdValue);
+				$shopFloorId = array_values($newShopFloorId);
+				$getAvailableFloor = KdmFloor::findAll($shopFloorId);
+				$out = $getAvailableFloor;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetshop() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$quadrant_id = $parents[2];
+				$block_id = $parents[3];
+				$floor_id = $parents[4];
+				$getShops  = KdmShop::find()->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'quadrant_id'=>$quadrant_id,'block_id'=>$block_id,'floor_id'=>$floor_id,'status'=>0,'reserved'=>0])->all();
+
+				$out = $getShops;
+
+				
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetshopamount($id) {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
+		$getShop  = KdmShop::findOne([$id]);	
+		setlocale(LC_MONETARY, 'en_US');
+		$money = money_format("%!n", $getShop->price);
+		return ['output'=>$money];
+	}
+	
+	public function actionInvoiceamount($id,$shop){
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$getShop  = KdmShop::findOne([$shop]);
+		$price = $getShop->price;
+		// amount multiply by % divided by 100
+		$invoiceAmount;
+		if($price){
+				if($id == 1){
+					$invoiceAmount = $price;
+				}
+				
+				if($id == 2){
+					$invoiceAmount = $price * 40 / 100;
+				}
+
+				if($id == 3){
+					$invoiceAmount = 0;
+				}
+
+				return ['status'=>1, 'price'=>$invoiceAmount, 'form' => $id];
+			}
+		
+	}
+	
+	public function actionProccessbooking($id){
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$shopBookingModel = new KdmSpaceBooking();
+		
+		$shopBookingInvoiceModel = new KdmInvoice();
+		$model = new BookingModel();
+		if ($model->load(Yii::$app->request->post()) ) {
+			$shopBookingModel->file_id = $id;
+			$shopBookingModel->shop_id = $model->shop;
+			$shopBookingModel->user_id = yii::$app->user->identity->id;
+			$shopBookingModel->date_created =  date("Y-m-d");
+			$shop = KdmShop::find()->andWhere(['id'=>$model->shop])->one();
+			$shop->status = 1;
+			$shopBookingInvoiceModel->invoice_number = 'KDM/'.rand(100,10000).Yii::$app->user->identity->id.$id;
+			$shopBookingInvoiceModel->shop_id = $model->shop;
+			$shopBookingInvoiceModel->payment_mode = 1;
+			$shopBookingInvoiceModel->file_no = $id;
+			$shopBookingInvoiceModel->amount = $shop->price;
+			$shopBookingInvoiceModel->due_date = date("Y-m-d", strtotime("+1 week"));
+			$shopBookingInvoiceModel->date_created = date("Y-m-d");
+			
+			if($shopBookingInvoiceModel->save(false) && $shopBookingModel->save(false) && $shop->save(false)){
+				return ['status'=> 1];
+			}else{
+				return ['status'=> 0];
+			}
+		}
+		
+	}
+	
+	public function actionProcesspaymentallocation($id)
+    {
+		
+		$model = new KdmPayment();
+		$invoicePaymentLink = new KdmInvoiceLinkPayment();
+		
+		$model->bill_reff = '00000A2';
+		$model->payment_id = '00000B2';
+		$model->receipt_date = date('Y-m-d');
+		$model->receit_id = '00A'.time();
+		$model->payment_for = 'Space Allocation';
+		
+        if ($model->load(Yii::$app->request->post()) ) {
+			
+			$model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+			$model->status = 0;
+			
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			
+			if ($model->upload()) {
+				$getPaymentSum = KdmPayment::find()->andWhere(['file_number_id' =>$model->file_number_id,'payment_for' => $model->payment_for])->sum('amount');
+				$getInvoiceAmount = KdmInvoice::find()->andwhere(['id' =>$id])->one()->amount;
+				$checkBalance = $getInvoiceAmount - $getPaymentSum;
+				$invoiceUpdater = KdmInvoice::find()->andwhere(['id' =>$id])->one();
+				
+				if($checkBalance > 0){
+					// check if its the first payment update date to 3months from now 
+					$countPayments = KdmPayment::find()->andWhere(['file_number_id' =>$model->file_number_id,'payment_for' => $model->payment_for])->count();
+					if($countPayments = 1  ){
+						// update 9months from now
+						$invoiceUpdater->due_date = date("Y-m-d", strtotime("+27 week"));
+						$invoiceUpdater->save(false);
+					}
+					
+					
+				}else{
+					// clear invoice
+					$invoiceUpdater->payment_status = 1;
+					$invoiceUpdater->save(false);
+				}
+				
+				$invoicePaymentLink->invoice_id = $id;
+				$invoicePaymentLink->payment_id = $model->id;
+				$invoicePaymentLink->amount = $model->amount;
+				$invoicePaymentLink->date_paid = date("Y-m-d");
+				$invoicePaymentLink->user_id = yii::$app->user->identity->id;
+				$invoicePaymentLink->status = 1;
+				
+				// do linking
+				if($invoicePaymentLink->save()){
+					return ['status' => 1, 'data' => $model->id];
+				}else{
+					return ['status' => 0, 'data' => $model];	
+				}
+				
+				
+                
+            }else{
+				return ['status' =>0];
+			}
+            
+        }
+    }
 
    
 }
