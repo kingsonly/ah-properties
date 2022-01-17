@@ -46,10 +46,16 @@ $space = KdmSpaceName::find()->all();
 		<div class="col-md-12 form-area" >
 
 			<div class="box-label">Space Booking </div>
+			<? if( $bookingModel == null){?>
 			
 			<?php $form = ActiveForm::begin(['id' => 'createbooking']); ?>
 			
 			<div class="row formrow">
+				<? if (\Yii::$app->user->can('createUser')) { ?>
+				<div class="col-md-12 margin-top-for-shop-button">
+					<?= Html::button('Go To Reserved Shops', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'loadspecial']) ?>
+				</div>
+				<? } ?>
 				
 					<div class="col-md-4">
 
@@ -176,8 +182,56 @@ $space = KdmSpaceName::find()->all();
 			
 			
 			<?php ActiveForm::end(); ?>
-			
-								  		
+			<? }else{?>
+				<? if (\Yii::$app->user->can('createUser')) { ?>
+				<div class="row">
+					<div class="col-md-10 margin-top-for-shop-button ">
+					
+				</div>
+				
+				<div class="col-md-2 margin-top-for-shop-button">
+					
+					<?= Html::button(' Delete', ['class' => 'fa fa-trash deleteallocation btn btn-danger btn-lg  button-design','id' =>'deleteallocation']) ?>
+					
+				</div>
+				<? } ?>
+					
+				<div class="col-md-12 reviewamountheader"> Amount <strong id="amounttopay">₦ <?= number_format($bookingModel->shop->price);?></strong></div>
+				<div class="col-md-4">
+				Space : <strong id="spacetext"><?= $bookingModel->shop->space->name; ?></strong>
+				</div>
+				<div class="col-md-4">
+					Type : <strong id="typetext"> <?= $bookingModel->shop->type->name?></strong>
+				</div>
+				<div class="col-md-4">
+					Quadrant : <strong id="quadranttext"><?= $bookingModel->shop->quadrant->name; ?></strong>
+				</div>
+				<div class="col-md-4">
+					Block : <strong id="blocktext"><?= $bookingModel->shop->block->name; ?></strong>
+				</div>
+				<div class="col-md-4">
+					Floor : <strong id="floortext"><?= $bookingModel->shop->floor->name; ?></strong>
+				</div>
+				<div class="col-md-4">
+					Shop Number : <strong id="shoptext"><?= $bookingModel->shop->name; ?></strong>
+				</div>
+					
+					<div class="col-md-6 margin-top-for-shop-button ">
+					<?= Html::button('Request Provisional Letter', ['class' => 'requestprovistional btn btn-primary btn-lg  button-design','id' =>'requestprovisionalletter']) ?>
+				</div>
+				
+				<div class="col-md-6 margin-top-for-shop-button">
+					
+					<?= Html::button('Request Approval Letter', ['class' => ' requestapproval btn btn-default button-border btn-lg button-design','id' =>'requestapprovalletter']) ?>
+					
+				</div>
+						
+				
+				
+
+				
+			</div>	
+			<? }?>
 
 		</div>
 
@@ -185,16 +239,163 @@ $space = KdmSpaceName::find()->all();
 
 <?
 
-	$id = $FileModel->id;
+	if(!empty($bookingModel)){
+		$id = $FileModel->id;
 	$createBioUrl = Url::to(['applicants/processbio']);
 	$proccessBooking = Url::to(['applicants/proccessbooking']);
 	$shopUrl = Url::to(['applicants/getshopamount']);
 	$contactDetails = Url::to(['applicants/contactdata']);
 	$priceUrl = Url::to(['applicants/invoiceamount']);
 	$invoice = Url::to(['applicants/invoice','id' => $id]);
+	$spacebookingSpecial = Url::to(['applicants/spacebookingspecial','id' => $id]);
+	// link to make request
+	$fileid= $bookingModel->file_id;
+	$bookingid = $bookingModel->id;
+	$approvalRequest = Url::to(['applicants/proccessdocumentrequest','type' => "full","fileid"=>$fileid,"bookingid"=>$bookingid]);
+
+	$provisionalRequest = Url::to(['applicants/proccessdocumentrequest','type' => "half","fileid"=>$fileid,"bookingid"=>$bookingid]);
+
+	$deleteAllocation = Url::to(['applicants/proccessdeleteallocation',"id"=>$bookingid]);
 
 	$biodataform = <<<JS
 	
+	$('.deleteallocation').on('click', function (e) {
+	if (confirm('Are You Sure You Want To delete allocation ?')) {
+	  
+	
+	$(document).find('.deleteallocation').addClass('deleteallocation2');
+	$(document).find('.deleteallocation').removeClass('deleteallocation');
+	toastr.info('Deleting Please Wait ............')
+	alert("$deleteAllocation")
+		 
+    $.ajax({
+        url: '$deleteAllocation',
+        type: 'GET',
+        datatype:'json',
+        
+        success: function (data) {
+        	//newData = data.data
+			if(data.status == 1){
+			$(document).find('.deleteallocation2').addClass('deleteallocation');
+			$(document).find('.deleteallocation2').removeClass('deleteallocation2');
+			$(document).find('#booking').trigger('click');
+			toastr.info('Deleted Successfully.')
+
+			}else{
+				alert('Please Try again as request could not be completed at this time.')
+				$(document).find('.deleteallocation2').addClass('deleteallocation');
+				$(document).find('.deleteallocation2').removeClass('deleteallocation');
+			}
+			
+			
+        },
+
+        error: function (data) {
+        	alert('Please Try again as request could not be completed at this time.')
+			$(document).find('.deleteallocation2').addClass('deleteallocation');
+			$(document).find('.deleteallocation2').removeClass('deleteallocation2');
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+		return false;
+		} 
+	})
+	
+	
+	
+	$('.requestprovistional').on('click', function (e) {
+	if (confirm('Are You Sure You Want To Request For A Provisional Letter ?')) {
+	  
+	
+	$(document).find('.requestprovistional').addClass('requestprovistional2');
+	$(document).find('.requestprovistional').removeClass('requestprovistional');
+	toastr.info('Making Request')
+	alert("$provisionalRequest")
+		 
+    $.ajax({
+        url: '$provisionalRequest',
+        type: 'GET',
+        datatype:'json',
+        
+        success: function (data) {
+        	//newData = data.data
+			if(data.status == 1){
+			$(document).find('.requestprovistional2').addClass('requestprovistional');
+			$(document).find('.requestprovistional2').removeClass('requestprovistional2');
+			toastr.info('Request has been made')
+
+			}else{
+				alert('Please Try again as request could not be completed at this time.')
+				$(document).find('.requestprovistional2').addClass('requestprovistional');
+				$(document).find('.requestprovistional2').removeClass('requestprovistional');
+			}
+			
+			
+        },
+
+        error: function (data) {
+        	alert('Please Try again as request could not be completed at this time.')
+			$(document).find('.requestprovistional2').addClass('requestprovistional');
+			$(document).find('.requestprovistional2').removeClass('requestprovistional2');
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+		return false;
+		} 
+	})
+	
+	
+	
+	$('.requestapproval').on('click', function (e) {
+	if (confirm('Are You Sure You Want To Request For An Approval Letter ?')) {
+	$(document).find('.requestapproval').addClass('requestapproval2');
+	$(document).find('.requestapproval').removeClass('requestapproval');
+	toastr.info('Making Request')
+		 
+    $.ajax({
+        url: '$approvalRequest',
+        type: 'GET',
+        datatype:'json',
+        
+        success: function (data) {
+        	//newData = data.data
+			if(data.status == 1){
+			$(document).find('.requestapproval2').addClass('requestapproval');
+			$(document).find('.requestapproval2').removeClass('requestapproval2');
+			toastr.info('Making Request')
+
+			}else{
+				alert('Please Try again as request could not be completed at this time.')
+				$(document).find('.requestapproval2').addClass('requestapproval');
+				$(document).find('.requestapproval2').removeClass('requestapproval2');
+			}
+			
+			
+        },
+
+        error: function (data) {
+        	alert('Please Try again as request could not be completed at this time.')
+			$(document).find('.requestapproval2').addClass('requestapproval');
+			$(document).find('.requestapproval2').removeClass('requestapproval2');
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+		return false;
+		}
+	})
+	
+	
+	$("#loadspecial").on("click", function() {
+		$(document).find('#renderapplicationform').html('<h1> Loading Please Wait</h1>');
+		
+		$(document).find('#renderapplicationform').load('$spacebookingSpecial');
+	})	
 	
 	$("#proceed").on("click", function() {
 		$(document).find('.formrow').hide();
@@ -321,4 +522,150 @@ $space = KdmSpaceName::find()->all();
 JS;
  
 $this->registerJs($biodataform);
+		
+	}else{
+		$id = $FileModel->id;
+	$createBioUrl = Url::to(['applicants/processbio']);
+	$proccessBooking = Url::to(['applicants/proccessbooking']);
+	$shopUrl = Url::to(['applicants/getshopamount']);
+	$contactDetails = Url::to(['applicants/contactdata']);
+	$priceUrl = Url::to(['applicants/invoiceamount']);
+	$invoice = Url::to(['applicants/invoice','id' => $id]);
+	$spacebookingSpecial = Url::to(['applicants/spacebookingspecial','id' => $id]);
+
+	$biodataform = <<<JS
+	
+	
+	$("#loadspecial").on("click", function() {
+		$(document).find('#renderapplicationform').html('<h1> Loading Please Wait</h1>');
+		
+		$(document).find('#renderapplicationform').load('$spacebookingSpecial');
+	})	
+	
+	$("#proceed").on("click", function() {
+		$(document).find('.formrow').hide();
+		$(document).find('.showproceed2').show()
+		$(document).find('.displaydetails').removeClass('hiddenrow')
+		$(document).find('.displaydetails').addClass('row')
+		$(document).find('.forminvoice').hide()
+		
+		// use api and value of selected to proccess amount to be paid
+		
+		space = $(document).find( "#space option:selected" ).text();
+		type = $(document).find( "#type option:selected" ).text();
+		quadrant = $(document).find( "#quadrant option:selected" ).text();
+		block = $(document).find( "#block option:selected" ).text();
+		floor = $(document).find( "#floor option:selected" ).text();
+		shop = $(document).find( "#shop option:selected" ).text();
+		amounttopay = $(document).find( ".form-area" ).data('amount');
+		
+		$(document).find( "#spacetext" ).html(space);
+		$(document).find( "#typetext" ).html(type);
+		$(document).find( "#quadranttext" ).html(quadrant);
+		$(document).find( "#blocktext" ).html(block);
+		$(document).find( "#floortext" ).html(floor);
+		$(document).find( "#shoptext" ).html(shop);
+		$(document).find( "#amounttopay" ).html(amounttopay);
+	})
+	
+	
+	$("#customFile").on("change", function() {
+  var fileName = $(this).val();
+  $(document).find("#customFile").addClass("selected").html('fileName');
+  
+});
+	
+	$('#createbooking').on('beforeSubmit', function (e) {
+	toastr.info('Processing biodata please wait')
+	var \$form = $(this);
+		var formData = new FormData(\$form[0]);
+		 
+    $.ajax({
+        url: '$proccessBooking'+'&id=$id',
+        type: 'POST',
+        data: formData,
+        datatype:'json',
+        // async: false,
+        beforeSend: function() {
+            // do some loading options
+        },
+        success: function (data) {
+        	//newData = data.data
+			if(data.status == 1){
+//				
+//				$(document).find('.list-group-item').removeClass('active');
+//				$(document).find('#contactdetails').addClass('active')
+//				toastr.success('Bio Data  Saved')
+				$(document).find('#renderapplicationform').load('$invoice');
+			}else{
+				alert('Please confirm your data to make sure values are correct')
+			}
+			
+			
+        },
+
+		complete: function() {
+            // success alerts
+        },
+
+        error: function (data) {
+        	alert('something went wrong') 
+			$(document).find('#backcontainer').html('<button id="back" class="btn btn-success btndesign"><icon class="fa fa-arrow-circle-left"></icon>BACK</button>')
+				$(document).find('.btndesign').on('click',function(){
+		
+			window.history.back();
+			})
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+		\$form.clear;
+		return false;
+	})
+	
+		$('#shop').on('change', function (e) {
+			value = $(this).val();
+			$(document).find(".form-area").data("store",value);
+			$.ajax({
+			url: '$shopUrl'+'&id='+value,
+			type: 'POST',
+			datatype:'json',
+			// async: false,
+			beforeSend: function() {
+				// do some loading options
+			},
+			success: function (data) {
+				
+				$(document).find('.amount_section').show();
+				$(document).find('.showproceed').show();
+				$(document).find( ".form-area" ).data('amount',data.output);
+				$(document).find('#amount_section_text').html('₦'+data.output);
+
+			},
+
+			complete: function() {
+				// success alerts
+			},
+
+			error: function (data) {
+				alert('something went wrong') 
+				$(document).find('#backcontainer').html('<button id="back" class="btn btn-success btndesign"><icon class="fa fa-arrow-circle-left"></icon>BACK</button>')
+					$(document).find('.btndesign').on('click',function(){
+
+				window.history.back();
+				})
+			},
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+
+			return false;
+	})
+
+JS;
+ 
+$this->registerJs($biodataform);
+	}
 ?>

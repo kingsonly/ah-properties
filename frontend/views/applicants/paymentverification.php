@@ -62,9 +62,13 @@ $verificationModel = new VerificationModel();
 													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => '','id' => 'customCheck'])->label(false); ?>
 																	
 												</div>
-												<div class="col-md-11">
+												<div class="col-md-6">
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
+												</div>
+												
+												<div class="col-md-5">
+													<?= Html::button('Decline', ['class' => 'btn btn-danger button-border btn-lg button-design','id' =>'decline']) ?>
 												</div>
 												
 												
@@ -79,8 +83,12 @@ $verificationModel = new VerificationModel();
 	$loadpaymentveri = Url::to(['applicants/paymentverification']);
 	
 	$loadagentveri = Url::to(['applicants/agentverification']);
+	$declineUrl = Url::to(['applicants/decline','id' => $model[0]->id,'section' => 'payment','applicant' => $model[0]->applicant_id]);
 	$createCustomerFormJs = <<<JS
 	
+	$('#decline').on('click',function(){
+		$(document).find('#renderapplicationform').load('$declineUrl');
+	})
 		
 	$('#bioveri').on('beforeSubmit', function (e) {
 	toastr.info('Processing')
@@ -98,11 +106,20 @@ $verificationModel = new VerificationModel();
         },
         success: function (data) {
         	newData = data.data
+        	modelchecks = data.modelcheck
 			if(data.status == 1){
 			
 				if(data.counts == 0){
-				// load agent
-				$(document).find('#renderapplicationform').load('$loadagentveri'+'&id='+newData[0].applicant_id);
+				
+				if(modelchecks.payment_for == 'Space Allocation'){
+				// triger leters
+					$(document).find('#letter').trigger('click');
+				}else{
+					// load agent
+					$(document).find('#renderapplicationform').load('$loadagentveri'+'&id='+newData[0].applicant_id);
+				}
+				
+				
 				}else{
 					$(document).find('#renderapplicationform').load('$loadpaymentveri'+'&id='+newData[0].applicant_id);
 				

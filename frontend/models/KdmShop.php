@@ -83,4 +83,12 @@ class KdmShop extends \yii\db\ActiveRecord
 
 		return $this->hasOne(KdmFloor::className(), ['id' => 'floor_id']);
 	}
+	
+	public function getBooking(){
+		return $this->hasOne(KdmSpaceBooking::className(), ['shop_id' => 'id']);
+	}
+	
+	public function getExemption(){
+		return $this->hasOne(KdmExemptedShops::className(), ['shop_id' => 'id']);
+	}
 }

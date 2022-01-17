@@ -430,8 +430,7 @@ use yii\widgets\ActiveForm;
 						</div>
 
 						<div class="col-md-6 " >
-							<h6 class="header-text-color">organization local government</h6>
-							<h5><?= $modelBio->lga->name ?></h5>
+							
 						</div>
 
 					</div>

@@ -64,5 +64,10 @@ class KdmApplicantOrganizationBio extends \yii\db\ActiveRecord
 		return $this->hasOne(KdmCountry::className(), ['id' => 'organization_country']);
 	}
 	
+	public function getContact(){
+
+		return $this->hasOne(KdmOrganizationContactDetails::className(), ['applicant_id' => 'applicant_id']);
+	}
+	
 	
 }

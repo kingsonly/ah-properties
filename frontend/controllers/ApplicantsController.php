@@ -36,11 +36,17 @@ use frontend\models\KdmInvoice;
 use frontend\models\KdmInvoiceLinkPayment;
 use frontend\models\KdmFloor;
 use frontend\models\Config;
+use frontend\models\KdmDecline;
 use frontend\models\KdmApplicantOrganizationContactPersonDetails;
 use frontend\models\BookingModel;
 use common\models\User;
 use yii\web\UploadedFile;
 use yii\base\Model;
+use frontend\models\KdmRequestUpdate;
+use frontend\models\KdmExemptionBathch;
+use frontend\models\KdmExemptedShops;
+use frontend\models\KdmNotification;
+use yii\helpers\Url;
 /**
  * Site controller
  */
@@ -96,7 +102,8 @@ class ApplicantsController extends Controller
      */
     public function actionIndex($id=null)
     {
-		$model = KdmApplicantBioData::find()->andWhere(['id' => $id])->one();
+		
+		$model = KdmRootApplicant::find()->andWhere(['id' => $id])->one();
 		
 		if($model){
 			$modelStatus = $model->stage_status;
@@ -105,9 +112,105 @@ class ApplicantsController extends Controller
 		}
 		return $this->render('index', [
 			'stage' => $modelStatus,
+			'model' =>$model,
+			'id' =>$id
                 
             ]);
     }
+	
+	
+	public function actionDelete($id=null)
+    {
+		
+		return $this->render('delete', [
+			
+            ]);
+    }
+	
+	public function actionAllocationletter($id=null,$notification=null)
+    {
+		$this->layout = 'print';
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		
+		if($notification != null){
+			// update notification status.
+			$updateNotification = KdmNotification::find()->andWhere(['id' => $notification])->one();
+			$updateNotification->status = 1;
+			$updateNotification->save(false);
+			
+		}
+		
+		return $this->render('allocationletter', [
+			'FileModel' => $FileModel,
+                
+            ]);
+    }
+	
+	public function actionDecline($id,$section,$applicant)
+    {
+		
+		$model = new KdmDecline();
+		
+		return $this->renderAjax('decline', [
+			'model' => $model,
+			'id' => $id,
+			'section' => $section,
+			'applicant' => $applicant,
+                
+            ]);
+    }
+	
+	public function actionProvisionalletter($id=null,$notification=null)
+    {
+		$this->layout = 'print';
+		if($notification != null){
+			// update notification status.
+			$updateNotification = KdmNotification::find()->andWhere(['id' => $notification])->one();
+			$updateNotification->status = 1;
+			$updateNotification->save(false);
+			
+		}
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		return $this->render('provisionalletter', [
+			'FileModel' => $FileModel,
+            ]);
+    }
+	
+	public function actionAcceptanceletter($id=null)
+    {
+		$this->layout = 'print';
+		
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		return $this->render('acceptanceletter', [
+			'FileModel' => $FileModel,
+                
+            ]);
+		
+    }
+	
+	public function actionGetshops(){
+		$this->layout = 'preview';
+		$allShops = KdmShop::find()->all();
+		$allocatedShops = KdmShop::find()->andWhere(['status' => 1])->all();
+		return $this->render('getshops', [
+			'allShops' => $allShops,
+			'allocatedShops' => $allocatedShops,
+                
+            ]);
+	}
+	
+	public function actionUpdateshop($id){
+		$model = KdmShop::find()->andWhere(['id'=>$id])->one();
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			Yii::$app->session->setFlash('updateshops', "Shop has been updated");
+            return $this->redirect(['getshops']);
+        }
+		return $this->render('updateshop', [
+			'model' => $model,
+            ]);
+		
+		
+	}
 	
 	//verification starts here
 	public function actionStatverification($id=null){
@@ -115,6 +218,19 @@ class ApplicantsController extends Controller
 		$model = KdmRootApplicant::find()->andWhere(['id' => $id])->one();
 		return $this->render('statverification', [
 			'model' => $model,
+            ]);
+	}
+	
+	public function actionReport(){
+		 $this->layout = 'print';
+		$modelInstance = new KdmSpaceBooking;
+		$getInvoiceSum = KdmInvoice::find()->sum('amount');
+		$getPayment = KdmPayment::find()->andWhere(['payment_for' => 'space allocation'])->sum('amount');
+		$model = $modelInstance->find()->all();
+		return $this->render('report', [
+			'model' => $model,
+			'getInvoiceSum' => $getInvoiceSum,
+			'getPayment' => $getPayment,
             ]);
 	}
 	
@@ -157,6 +273,19 @@ class ApplicantsController extends Controller
             ]);
 	}
 	
+	public function actionSpacebookingspecial($id=null){
+		
+		$model = new BookingModel();
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		// Check booking model to confirm if space have been booked for this file 
+		$bookingModel = KdmSpaceBooking::find()->andWhere(['file_id' => $id])->one();
+		return $this->renderAjax('spacebookingspecial', [
+			'model' => $model,
+			'bookingModel' =>$bookingModel,
+			'FileModel' =>$FileModel,
+            ]);
+	}
+	
 	
 	public function actionInvoice($id=null){
 		
@@ -174,6 +303,14 @@ class ApplicantsController extends Controller
 		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
 		return $this->renderAjax('folderpayments', [
 			'model' => $model,
+			'FileModel' =>$FileModel,
+            ]);
+	}
+	
+	public function actionFolderletters($id=null){
+		
+		$FileModel = KdmApplicantFileNumber::find()->andWhere(['id'=>$id])->one();
+		return $this->renderAjax('letters', [
 			'FileModel' =>$FileModel,
             ]);
 	}
@@ -212,11 +349,21 @@ class ApplicantsController extends Controller
 	
 	public function actionPaymentverification($id=null){
 		
-		$model = KdmPayment::find()->andWhere(['applicant_id' => $id])->all();
+		$model = KdmPayment::find()->andWhere(['applicant_id' => $id, 'status' => 0])->all();
 		return $this->renderAjax('paymentverification', [
 			'model' => $model,
             ]);
 	}
+	
+	public function actionLetterpaymentverification($id=null){
+		
+		$model = KdmPayment::find()->andWhere(['file_number_id' => $id, 'status' => 0])->all();
+		return $this->renderAjax('letterpaymentverification', [
+			'model' => $model,
+            ]);
+	}
+	
+	
 	
 	public function actionAgentverification($id=null){
 		
@@ -277,10 +424,7 @@ class ApplicantsController extends Controller
     return ['output'=>'', 'selected'=>''];
 }
 	
-	
-	
-	
-	
+
 	public function actionPreview($id=null)
     {
 		
@@ -604,21 +748,46 @@ class ApplicantsController extends Controller
 		
     }
 	
+	public function actionInvoiceprint($id=null){
+		$this->layout = 'print';
+		$model = KdmInvoice::find()->andWhere(['id' => $id])->one();
+		$bio;
+		$contact;
+		
+		if($model->fileno->applicantid->applicant_type == 1){
+			$bio = $model->fileno->applicantid->individual;
+			$contact = KdmContactDetails::find()->andWhere(['applicant_id' => $model->fileno->applicantid->id])->one();
+			
+		}else{
+			$bio = $model->fileno->applicantid->organization;
+			$contact = KdmOrganizationContactDetails::find()->andWhere(['applicant_id' => $model->fileno->applicantid->id])->one();
+		}
+		return $this->render('invoiceprint', [
+			'model' => $model,
+			'type' => $model->fileno->applicantid->applicant_type,
+			'bio' => $bio,
+			'contact' => $contact,
+            ]);
+	}
+	
 	
 	public function actionApplicants()
     {
 		
 		$this->layout = 'preview';
-		$model = KdmRootApplicant::find()->all();;
-		$modelApproved = KdmRootApplicant::find()->andWhere(['status' => 3])->all();
-		$modelPending = KdmRootApplicant::find()->andWhere(['status' => 2])->all();
-		$modelDeclined = KdmRootApplicant::find()->andWhere(['status' => 4])->all();
+		$modela = new KdmRootApplicant();
+		$model = $modela->find()->all();
+		$modelApproved = $modela->find()->andWhere(['status' => 3])->all();
+		$modelPending = $modela->find()->andWhere(['status' => 2])->all();
+		$modelDeclined = $modela->find()->andWhere(['status' => 4])->all();
+		$modelIncomplete = $modela->find()->andWhere(['status' => 0])->all();
 		
 		return $this->render('applicants', [
 			'model' => $model,
 			'modelApproved' => $modelApproved,
 			'modelPending' => $modelPending,
 			'modelDeclined' => $modelDeclined,
+			'modelIncomplete' => $modelIncomplete,
 		]);
 		
 		
@@ -811,7 +980,7 @@ class ApplicantsController extends Controller
             ]);
     }
 	
-		public function actionFilepaymentdata($id,$invoice)
+	public function actionFilepaymentdata($id,$invoice)
     {
 		
 		$fileNumberModel = KdmApplicantFileNumber::find()->andWhere(['id' => $id])->one();
@@ -865,10 +1034,7 @@ class ApplicantsController extends Controller
 	public function actionProcessbio()
     {
 		$model = new KdmApplicantBioData();
-		
-		
 	
-			
         if ($model->load(Yii::$app->request->post()) ) {
 			
 			$model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -1373,7 +1539,7 @@ class ApplicantsController extends Controller
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 			
 			$model->status = 1;
-			if ($model->save()) {
+			if ($model->save(false)) {
 				$rootModel = KdmRootApplicant::find()->andWhere(['id' => $id])->one();
 	
 				$rootModel->verification_status = 1;
@@ -1566,7 +1732,7 @@ class ApplicantsController extends Controller
 	
 					$rootModel->verification_status = 5;
 					if($rootModel->save()){
-						return ['status' => 1,'data' => $model,'counts' => $model2 ];
+						return ['status' => 1,'data' => $model,'counts' => $model2,'modelcheck' => $model[0]  ];
 					}else{
 						return ['status' => 0,'data' => $model,'counts' => $model2 ];
 					}
@@ -1580,6 +1746,33 @@ class ApplicantsController extends Controller
             
         
     }
+	
+	
+	public function actionProccesspaymentveriletter($id = null)
+    {
+		
+		
+		$model = KdmPayment::find()->andWhere(['file_number_id' => $id,'status'=>0])->all();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			$model[0]->status = 1;
+			if ($model[0]->save(false)) {
+				$model2 = KdmPayment::find()->andWhere(['file_number_id' => $id,'status'=>0])->count();
+				if($model2 > 0 ){
+					return ['status' => 1,'data' => $model,'counts' => $model2,'modelcheck' => $model[0]  ];
+				}else{
+					return ['status' => 2,'data' => $model,'counts' => $model2,'modelcheck' => $model[0]  ];
+				}
+				
+				
+                
+            }else{
+				return ['status' => 0,'data' => $model];
+			}
+            
+        
+    }
+	
 	
 	public function actionProccessagentveri($id = null)
     {
@@ -1650,7 +1843,9 @@ class ApplicantsController extends Controller
 					$bioModel = KdmApplicantOrganizationContactPersonDetails::find()->andWhere(['applicant_id' => $id])->one();
 					$phone = $bioModel->phone_number;
 				}
-				$message = 'Congratulation your application for a space at The Kafe District Market has been processed and verified. kindly visit the office at No 1 Masarki close off Parakou Cresent Wuse2 Abuja for space allocation.';
+				$message = 'This is a courtesy message to let you know that your KDM application is successful. Kindly visit the office with your valid ID card and evidence of payment. Thank you.
+				Note:
+				As a representative, kindly bring a letter of authorization from the applicant of the shop/space with a copy of their valid ID card.';
 				Config::sendSms($phone,$message);
 				return $this->redirect(['applicants/confirmverificationsuccess']);
 				return ['status' => 1,'data' => $model];
@@ -1719,7 +1914,8 @@ class ApplicantsController extends Controller
 			}
 		}
 		return ['output'=>'', 'selected'=>''];
-	}
+	}	
+	
 	
 	public function actionGetquadrant() {
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -1753,6 +1949,7 @@ class ApplicantsController extends Controller
 		}
 		return ['output'=>'', 'selected'=>''];
 	}
+	
 	
 	public function actionGetblock() {
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -1846,6 +2043,167 @@ class ApplicantsController extends Controller
 		return ['output'=>'', 'selected'=>''];
 	}
 	
+	
+	public function actionGettypespecial() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$getShops  = KdmShop::find()->select(['space_type_id'])->andWhere(['space_id' => $shop_id,'status'=>0,'reserved'=>1])->asArray()->all();
+
+				$shopTypeIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopTypeIdValue,$value['space_type_id']);
+				}
+
+				$newShopTypeId = array_unique($shopTypeIdValue);
+				$shopTypeId = array_values($newShopTypeId);
+				$getAvailableTypes = KdmSpaceType::findAll($shopTypeId);
+				$out = $getAvailableTypes;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetquadrantspecial() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$getShops  = KdmShop::find()->select(['quadrant_id'])->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'status'=>0,'reserved'=>1])->asArray()->all();
+
+				$shopQuadrantIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopQuadrantIdValue,$value['quadrant_id']);
+				}
+
+				$newShopQuadrantId = array_unique($shopQuadrantIdValue);
+				$shopQuadrantId = array_values($newShopQuadrantId);
+				$getAvailableQuadrant = KdmQuadrant::findAll($shopQuadrantId);
+				$out = $getAvailableQuadrant;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	
+	public function actionGetblockspecial() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$quadrant_id = $parents[2];
+				$getShops  = KdmShop::find()->select(['block_id'])->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'quadrant_id'=>$quadrant_id,'status'=>0,'reserved'=>1])->asArray()->all();
+
+				$shopBlockIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopBlockIdValue,$value['block_id']);
+				}
+
+				$newShopBlockId = array_unique($shopBlockIdValue);
+				$shopBlockId = array_values($newShopBlockId);
+				$getAvailableBlock = KdmBlock::findAll($shopBlockId);
+				$out = $getAvailableBlock;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetfloorspecial() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$quadrant_id = $parents[2];
+				$block_id = $parents[3];
+				$getShops  = KdmShop::find()->select(['floor_id'])->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'quadrant_id'=>$quadrant_id,'block_id'=>$block_id,'status'=>0,'reserved'=>1])->asArray()->all();
+
+				$shopFloorIdValue = [];
+				foreach($getShops as $key => $value){
+					array_push($shopFloorIdValue,$value['floor_id']);
+				}
+
+				$newShopFloorId = array_unique($shopFloorIdValue);
+				$shopFloorId = array_values($newShopFloorId);
+				$getAvailableFloor = KdmFloor::findAll($shopFloorId);
+				$out = $getAvailableFloor;
+
+				// the getSubCatList function will query the database based on the
+				// cat_id and return an array like below:
+				// [
+				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+				// ]
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	public function actionGetshopspecial() {
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$out = [];
+
+		if (isset($_POST['depdrop_parents'])) {
+			$parents = $_POST['depdrop_parents'];
+			if ($parents != null) {
+				$shop_id = $parents[0];
+				$shop_type_id = $parents[1];
+				$quadrant_id = $parents[2];
+				$block_id = $parents[3];
+				$floor_id = $parents[4];
+				$getShops  = KdmShop::find()->andWhere(['space_id' => $shop_id,'space_type_id'=>$shop_type_id,'quadrant_id'=>$quadrant_id,'block_id'=>$block_id,'floor_id'=>$floor_id,'status'=>0,'reserved'=>1])->all();
+
+				$out = $getShops;
+
+				
+				return ['output'=>$out, 'selected'=>''];
+			}
+		}
+		return ['output'=>'', 'selected'=>''];
+	}
+	
+	
+	
 	public function actionGetshopamount($id) {
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		
@@ -1892,7 +2250,7 @@ class ApplicantsController extends Controller
 			$shopBookingModel->date_created =  date("Y-m-d");
 			$shop = KdmShop::find()->andWhere(['id'=>$model->shop])->one();
 			$shop->status = 1;
-			$shopBookingInvoiceModel->invoice_number = 'KDM/'.rand(100,10000).Yii::$app->user->identity->id.$id;
+			//$shopBookingInvoiceModel->invoice_number = 'KDM/'.rand(100,10000).Yii::$app->user->identity->id.$id;
 			$shopBookingInvoiceModel->shop_id = $model->shop;
 			$shopBookingInvoiceModel->payment_mode = 1;
 			$shopBookingInvoiceModel->file_no = $id;
@@ -1901,7 +2259,24 @@ class ApplicantsController extends Controller
 			$shopBookingInvoiceModel->date_created = date("Y-m-d");
 			
 			if($shopBookingInvoiceModel->save(false) && $shopBookingModel->save(false) && $shop->save(false)){
-				return ['status'=> 1];
+				$getBookingDetails =  KdmSpaceBooking::find()->andWhere(["id" => $shopBookingModel->id])->one();
+				
+				$newInvoiceNumber = KdmInvoice::find()->andWhere(['id' => $shopBookingInvoiceModel->id ])->one();
+				
+				$newInvoiceNumber->invoice_number = Config::convertInvoiceNumber($newInvoiceNumber->id);
+				
+				if($newInvoiceNumber->save(false)){
+//					$body = "
+//					Dear Admin <br/> 
+//					the user with the file number 
+//					 ".$getBookingDetails->file->file_number." has been giving a provisional shop (".$getBookingDetails->shop->name.") which is a ".Config::getType($getBookingDetails->shop->name)." Your attention is needed in the printing of invoice of this customer";
+					
+					return ['status'=> 1];
+				}else{
+					// role back and start afresh 
+					return ['status'=> 1];
+				}
+				
 			}else{
 				return ['status'=> 0];
 			}
@@ -1920,6 +2295,7 @@ class ApplicantsController extends Controller
 		$model->receipt_date = date('Y-m-d');
 		$model->receit_id = '00A'.time();
 		$model->payment_for = 'Space Allocation';
+		$getInvoice = KdmInvoice::find()->andwhere(['id' =>$id])->one();
 		
         if ($model->load(Yii::$app->request->post()) ) {
 			
@@ -1931,24 +2307,29 @@ class ApplicantsController extends Controller
 			
 			if ($model->upload()) {
 				$getPaymentSum = KdmPayment::find()->andWhere(['file_number_id' =>$model->file_number_id,'payment_for' => $model->payment_for])->sum('amount');
-				$getInvoiceAmount = KdmInvoice::find()->andwhere(['id' =>$id])->one()->amount;
-				$checkBalance = $getInvoiceAmount - $getPaymentSum;
-				$invoiceUpdater = KdmInvoice::find()->andwhere(['id' =>$id])->one();
+				
+				$checkBalance = $getInvoice->amount - $getPaymentSum;
 				
 				if($checkBalance > 0){
 					// check if its the first payment update date to 3months from now 
 					$countPayments = KdmPayment::find()->andWhere(['file_number_id' =>$model->file_number_id,'payment_for' => $model->payment_for])->count();
 					if($countPayments = 1  ){
 						// update 9months from now
-						$invoiceUpdater->due_date = date("Y-m-d", strtotime("+27 week"));
-						$invoiceUpdater->save(false);
+						$getInvoice->due_date = date("Y-m-d", strtotime("+27 week"));
+						$getInvoice->save(false);
 					}
 					
 					
 				}else{
 					// clear invoice
-					$invoiceUpdater->payment_status = 1;
-					$invoiceUpdater->save(false);
+					// clear booking
+					
+					$bookingModel = KdmSpaceBooking::find()->andWhere(['file_id' => $model->file_number_id])->one();
+					$getInvoice->payment_status = 1;
+					$bookingModel->status = 1;
+					$bookingModel->date_approved  = date("Y-m-d");
+					$bookingModel->save(false);
+					$getInvoice->save(false);
 				}
 				
 				$invoicePaymentLink->invoice_id = $id;
@@ -1957,6 +2338,18 @@ class ApplicantsController extends Controller
 				$invoicePaymentLink->date_paid = date("Y-m-d");
 				$invoicePaymentLink->user_id = yii::$app->user->identity->id;
 				$invoicePaymentLink->status = 1;
+				
+				
+				
+				if($getInvoice->fileno->applicantid->applicant_type == 1){
+					$bioModel = KdmContactDetails::find()->andWhere(['applicant_id' => $getInvoice->fileno->applicantid->id])->one();
+					$phone = $bioModel->mobile_number;
+				}else{
+					$bioModel = KdmApplicantOrganizationContactPersonDetails::find()->andWhere(['applicant_id' => $getInvoice->fileno->applicantid->id])->one();
+					$phone = $bioModel->phone_number;
+				}
+				$message = 'This is a courtesy message to let you know your shop/space payment has been confirmed. We will call/send an SMS to confirm collection of legal documents. Thank you.';
+				Config::sendSms($phone,$message);
 				
 				// do linking
 				if($invoicePaymentLink->save()){
@@ -1973,6 +2366,563 @@ class ApplicantsController extends Controller
             
         }
     }
+	
+	public function actionProccessdecline()
+    {
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$model = new KdmDecline();
+		
+        if ($model->load(Yii::$app->request->post()) ) {
+			
+			if($model->save()){
+				$rootModel = KdmRootApplicant::find()->andWhere(['id' => $model->applicant_id])->one();
+				$rootModel->status = 4;
+				if($rootModel->save()){
+					return ['status'=> 1];
+				}else{
+					return ['status'=> 2];
+				}
+			}else{
+				return ['status'=> 0];
+			}
+            
+        }
+    }
+	
+	public function actionRequestupdate($tablename,$tableid){
+		$model = new KdmRequestUpdate();
+		if ($model->load(Yii::$app->request->post()) ) {
+			$model->table_name = $tablename;
+			$model->table_id = $tableid;
+			$model->status = 1;
+			$model->request_date = date('Y-m-d');
+			
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			
+			if ($model->save()) {
+				
+				
+				return ['status' => 1,'data' => 'request sent'];
+                
+            }else{
+				return ['status' => 'an error happened pleas try again'];
+			}
+            
+        }
+		
+	}
+	
+	//// start update of forms here 
+	
+	public function actionUpdatecontactdata($id,$updateid){
+		//$this->layout = 'print';
+		$model = KdmContactDetails::find()->andWhere(['id'=>$id])->one();
+		return $this->renderAjax('updatecontactdetails', [
+			'model' => $model,
+			'updateid' => $updateid,
+                
+            ]);
+		
+	}
+	
+	public function actionUpdatebiodata($id,$updateid){
+		//$this->layout = 'print';
+		$model = KdmApplicantBioData::find()->andWhere(['id'=>$id])->one();
+		$model->imageFile = $model->image;
+		return $this->renderAjax('updatebiodata', [
+			'model' => $model,
+			'updateid' => $updateid,
+                
+            ]);
+		
+	}
+	
+	public function actionUpdatenextofkin($id,$updateid){
+		//$this->layout = 'print';
+		$model = KdmNextOfKin::find()->andWhere(['id'=>$id])->one();
+		return $this->renderAjax('updatenextofkin', [
+			'model' => $model,
+			'updateid' => $updateid,
+                
+            ]);
+		
+	}
+	
+	public function actionUpdatedocumentupload($id,$updateid){
+		//$this->layout = 'print';
+		$model = KdmDocumentUpload::find()->andWhere(['id'=>$id])->one();
+		$model->imageFile = $model->image_path;
+		return $this->renderAjax('updatedocumentupload', [
+			'model' => $model,
+			'updateid' => $updateid,
+                
+            ]);
+		
+	}
+	
+	public function actionUpdatepayment($id,$updateid){
+		//$this->layout = 'print';
+		$model = KdmPayment::find()->andWhere(['id'=>$id])->one();
+		
+		$model->imageFile = $model->image;
+		return $this->renderAjax('updatepayment', [
+			'model' => $model,
+			'updateid' => $updateid,
+                
+            ]);
+		
+	}
+	
+	public function actionUpdateagent($id,$updateid){
+		//$this->layout = 'print';
+		$model = KdmApplicantAgent::find()->andWhere(['id'=>$id])->one();
+		
+		return $this->renderAjax('updateagent', [
+			'model' => $model,
+			'updateid' => $updateid,
+                
+            ]);
+		
+	}
+	
+	public function actionAdminupdatelistview(){
+		$this->layout = 'preview';
+		$model = KdmRequestUpdate::find()->orderBy(['status' => SORT_ASC])->all();
+		return $this->render('adminupdatelistview', [
+			'model' => $model,
+            ]);
+	}
+	
+	
+	
+	
+	
+	
+	//// start update processing
+	
+	public function actionProcesscontactupdate($id,$updateid)
+    {
+		$model =  KdmContactDetails::find()->andWhere(['id' => $id])->one();
+		
+		
+        if ($model->load(Yii::$app->request->post()) ) {
+			
+			
+		
+			//$model->user_id = Yii::$app->user->identity->id;
+			
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			if ($model->save()) {
+				$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$model->applicant_id])->one();
+				$rootModel->verification_status  = 0;
+				$rootModel->status  = 2;
+				
+				$requestUpdate = KdmRequestUpdate::find()->andWhere(['id'=>$updateid])->one();
+				$requestUpdate->status = 3;
+				
+				if($rootModel->save() and $requestUpdate->save()){
+					return ['status' => 1,'data' => $model];
+				}else{
+					return ['status' => 0,'data' => 'status not updated'];
+				}
+				
+                
+            }else{
+				return ['status' => $model];
+			}
+            
+        }
+    }
+	
+	public function actionProcessbiodataupdate($id,$updateid)
+    {
+		$model = KdmApplicantBioData::find()->andWhere(['id' => $id])->one();
+		
+		
+	
+			
+        if ($model->load(Yii::$app->request->post()) ) {
+			
+			$model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+			$model->stage_status = 1;
+			$model->user_id = Yii::$app->user->identity->id;
+			
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			
+			if ($model->upload()) {
+				$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$model->applicant_id])->one();
+				$rootModel->verification_status  = 0;
+				$rootModel->status  = 2;
+				
+				$requestUpdate = KdmRequestUpdate::find()->andWhere(['id'=>$updateid])->one();
+				$requestUpdate->status = 3;
+				
+				if($rootModel->save() and $requestUpdate->save()){
+					return ['status' => 1,'data' => $model,'updateid' => $updateid];
+				}else{
+					return ['status' => 0,'data' => 'status not updated'];
+				}
+				
+				
+				}else{
+					return ['status' => 0,'data' => $model];
+				}
+                
+            }else{
+				return ['status' => $model];
+			}
+			
+            
+        }
+	
+	public function actionProcessnextofkinupdate($id,$updateid)
+    {
+		
+		$model = KdmNextOfKin::find()->andWhere(['id' => $id])->one();
+		
+		
+        if ($model->load(Yii::$app->request->post()) ) {
+			
+			
+			$model->status = 0;
+			//$model->user_id = Yii::$app->user->identity->id;
+			
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			if ($model->save()) {
+				$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$model->applicant_id])->one();
+				$rootModel->verification_status  = 0;
+				$rootModel->status  = 2;
+				
+				$requestUpdate = KdmRequestUpdate::find()->andWhere(['id'=>$updateid])->one();
+				$requestUpdate->status = 3;
+				
+				if($rootModel->save() and $requestUpdate->save()){
+					return ['status' => 1,'data' => $model,'updateid' => $updateid];
+				}else{
+					return ['status' => 0,'data' => 'status not updated'];
+				}
+				
+				
+				}else{
+					return ['status' => 0,'data' => $model];
+				}
+				
+                
+            }else{
+				return ['status' => $model];
+			}
+            
+        }
+	
+	public function actionProcessdocumentuploadupdate($id,$updateid)
+    {
+		
+		$model = KdmDocumentUpload::find()->andWhere(['id' => $id])->one();
+			
+		if ($model->load(Yii::$app->request->post()) ) {
+			$model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+			$model->status = 0;
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			
+			if ($model->upload()) {
+				$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$model->applicant_id])->one();
+				$rootModel->verification_status  = 0;
+				$rootModel->status  = 2;
+				
+				$requestUpdate = KdmRequestUpdate::find()->andWhere(['id'=>$updateid])->one();
+				$requestUpdate->status = 3;
+				
+				if($rootModel->save() and $requestUpdate->save()){
+					return ['status' => 1,'data' => $model,'updateid' => $updateid];
+				}else{
+					return ['status' => 0,'data' => 'status not updated'];
+				}
+				
+				
+				}else{
+					return ['status' => 0,'data' => $model];
+				}
+				
+                
+            }else{
+				return ['status' => 0 ,'data' => $model];
+			}
+            
+        }
+	
+	public function actionProcesspaymentupdate($id,$updateid)
+    {
+		
+		$model = KdmPayment::find()->andWhere(['id' => $id])->one();
+		
+		 if ($model->load(Yii::$app->request->post()) ) {
+			
+			$model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+			$model->status = 0;
+			
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			
+			if ($model->upload()) {
+				$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$model->applicant_id])->one();
+				$rootModel->verification_status  = 0;
+				$rootModel->status  = 2;
+				
+				$requestUpdate = KdmRequestUpdate::find()->andWhere(['id'=>$updateid])->one();
+				$requestUpdate->status = 3;
+				
+				if($rootModel->save() and $requestUpdate->save()){
+					return ['status' => 1,'data' => $model,'updateid' => $updateid];
+				}else{
+					return ['status' => 0,'data' => 'status not updated'];
+				}
+				
+				
+				}else{
+					return ['status' => 0,'data' => $model];
+				}
+            
+        }
+		
+		
+		
+            
+        }
+	
+	public function actionProcessagentupdate($id,$updateid)
+    {
+		
+		$model =  KdmApplicantAgent::find()->andWhere(['id' => $id])->one();
+		
+		
+        if ($model->load(Yii::$app->request->post()) ) {
+					
+			//$model->user_id = Yii::$app->user->identity->id;
+			
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			if ($model->save()) {
+				$rootModel = KdmRootApplicant::find()->andWhere(['id'=>$model->applicant_id])->one();
+				$rootModel->verification_status  = 0;
+				$rootModel->status  = 2;
+				
+				$requestUpdate = KdmRequestUpdate::find()->andWhere(['id'=>$updateid])->one();
+				$requestUpdate->status = 3;
+				
+				if($rootModel->save() and $requestUpdate->save()){
+					return ['status' => 1,'data' => $model];
+				}else{
+					return ['status' => 0,'data' => 'status not updated'];
+				}
+				
+                
+            }else{
+				return ['status' => $model];
+			}
+            
+        }
+		
+		
+		
+            
+        }
+	
+	public function actionProcessacceptrequest($id)
+    {
+		
+		$model =  KdmRequestUpdate::find()->andWhere(['id' => $id])->one();
+
+		$model->status = 2;
+
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+		if ($model->save()) {
+
+			return ['status' => 1,'data' => $model];
+
+		}else{
+			return ['status' => 0,'data' => 'status not updated'];
+		}
+
+            
+        }
+	
+	// exeptions starts here 
+	
+	public function actionAllocatedreservedshops(){
+		$this->layout = 'preview';
+		$model = KdmShop::find()->andWhere(['status' => 1,'reserved' =>1])->all();
+		//$model = KdmShop::find()->andWhere(['status' => 1,'reserved' =>0])->all();
+		return $this->render('allocatedreservedshops', [
+			'model' => $model,
+            ]);
+		
+	}
+	
+	public function actionAllocatedreservedshopsprint($id){
+		$this->layout = 'print';
+		$model = KdmExemptedShops::find()->andWhere(['batch_id' => $id])->all();
+		$exemptionBatch = KdmExemptionBathch::find()->andWhere(['id' => $id])->one();
+		return $this->render('allocatedreservedshopsprint', [
+			'model' => $model,
+			'exemptionBatch' => $exemptionBatch,
+            ]);
+		
+	}
+	
+	
+	
+	public function actionExemption(){
+		$this->layout = 'preview';
+		$model =  KdmExemptionBathch::find()->all();
+		return $this->render('exemption', [
+			'model' => $model,
+            ]);
+		
+	}
+	
+	public function actionViewbatch($id){
+		
+		$model = KdmExemptedShops::find()->andWhere(['batch_id' => $id])->all();
+		$exemptionBatch = KdmExemptionBathch::find()->andWhere(['id' => $id])->one();
+		return $this->render('viewbatch', [
+			'model' => $model,
+			'exemptionBatch' => $exemptionBatch,
+            ]);
+		
+	}
+    
+	//Proccess reseved Approval 
+	
+	public function actionProccessreservedapproval(){
+		$data = Yii::$app->request->post()['data'];
+		$who = Yii::$app->request->post()['who'];
+		$exemptionBatchModel = new KdmExemptionBathch();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$exemptionBatchModel->date_created = date('Y-m-d');
+		$exemptionBatchModel->user_id = yii::$app->user->identity->id;
+		if($exemptionBatchModel->save(false)){
+			$newExeptedBatch = KdmExemptionBathch::find()->andWhere(['id' =>$exemptionBatchModel->id])->one();
+			if($who == 'ah' ){
+				$year = date('Y');
+				$month = date('m');
+				$newExeptedBatch->bathch_no = 'EXP/'.$month.$year.'/AHP/'. str_pad($newExeptedBatch->id, 3, "0", STR_PAD_LEFT);;
+			}
+			
+			if($who == 'masarki'){
+				$year = date('Y');
+				$month = date('m');
+				$newExeptedBatch->bathch_no = 'EXP/'.$month.$year.'/MNL/'. str_pad($newExeptedBatch->id, 3, "0", STR_PAD_LEFT);
+			}
+			
+			if($newExeptedBatch->save(false)){
+				foreach($data as $key => $value){
+					$exemptedShopsModel = new KdmExemptedShops();
+					$exemptedShopsModel->batch_id = $newExeptedBatch->id;
+					$exemptedShopsModel->shop_id = $value;
+					$exemptedShopsModel->save(false);
+					
+				}
+				return ['status' => 1,'data' => $exemptionBatchModel->id];
+			}
+		}
+		
+		return ['status' => 0,'data' => Yii::$app->request->post()['data']];
+		
+	}
+	
+	
+	
+	public function actionProccessdocumentrequest($type=null,$fileid=null,$bookingid=null){
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$model = new KdmNotification();
+		if($type == "full"){
+			$description = "full payment made for shop 12345";
+			$link = Url::to(["applicants/allocationletter","id" => $fileid ]);
+		}else{
+			$description = "Some Payment have been made for shop 34567";
+			$link = Url::to(["applicants/provisionalletter","id" => $fileid ]);
+		}
+		
+		$model->file_id = $fileid;
+		$model->description = $description;
+		$model->link = $link;
+		$model->status = 0;
+		// get booking  details
+		$bookingDetails = KdmSpaceBooking::find()->andWhere(["id" => $bookingid])->one();
+		if($model->save(false)){
+			// sent email with details
+			if( $bookingDetails->file->applicantid->applicant_type == 1 ){
+				$customerName = $bookingDetails->file->applicantid->individual->last_name." ".$bookingDetails->file->applicantid->individual->first_name." ".$bookingDetails->file->applicantid->individual->middle_name;
+			}else{
+				$customerName = $bookingDetails->file->applicantid->organization->organization_name;
+			}
+			if($type == "full"){
+				$description = "Greetings,<br/> The shop space with the following details is ready for printing.
+				<br/>
+				Name :
+				".$customerName.
+					"<br/> Shop Number: ".$bookingDetails->shop->name."<br/>Shop Type: ".Config::getSpaceSize($bookingDetails->shop->space->name,$bookingDetails->shop->type->name)."<br/>Letter Type: Allocation";
+				$links = "https://kafemarket.ah-properties.ng/".Url::to(["applicants/allocationletter","id" => $fileid,"notification"=> $model->id ]);
+			}else{
+				
+				$description = "Greetings,<br/> The shop space with the following details is ready for printing.
+				<br/>
+				Name :
+				".$customerName.
+					"<br/> Shop Number: ".$bookingDetails->shop->name."<br/>Shop Type: ".Config::getSpaceSize($bookingDetails->shop->space->name,$bookingDetails->shop->type->name)."<br/>Letter Type: Allocation";
+				
+				$links = "kafemarket.ah-properties.ng/".Url::to(["applicants/provisionalletter","id" => $fileid,"notification"=> $model->id ]);
+			}
+			
+			Config::sendEmail("Letter Print Request Notification",$description,"allocation@ah-properties.ng","kdm@ah-properties.ng","Letter Print Request Notification",$links,"Thank You.");
+			
+			//Config::sendEmail("Letter Print Request Notification",$description,"allocation@ah-properties.ng","kdm@ah-properties.ng","Letter Print Request Notification",$link,"Thank You.");
+			
+			return ['status' => 1];
+		}else{
+			return ['status' => 0];
+		}
+		
+		
+		
+	}
+	
+	
+	
+	public function actionProccessdeleteallocation($id){
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		// impliment a role back so every thing is deleteded or reverted back.
+		$model = KdmSpaceBooking::find()->andWhere(["id" => $id])->one();
+		
+		if(!empty($model->invoice->payment)){
+			foreach($model->invoice->payment as $key => $value){
+				$value->payment->delete();
+				$value->delete();
+			}
+		}
+		
+		if(!empty($model->exemptedshops)){
+			$model->exemptedshops->delete();
+		}
+		$model->invoice->delete();
+		$shopModel = $model->shop;
+		$shopModel->status = 0;
+		$shopModel->save(false);
+		$model->delete();
+		return ['status' => 1];
+	
+	}
+	
+	
+	
+	
+
 
    
 }

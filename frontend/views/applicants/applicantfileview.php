@@ -6,7 +6,9 @@ use yii\widgets\ActiveForm;
 
 ?>
 <style>
-	
+	.display_image2{
+		width: 200px;
+	}
 </style>
 <? if($rootModel->applicant_type == 1){ ?>			
 						
@@ -24,7 +26,7 @@ use yii\widgets\ActiveForm;
 												
 													<div class="row ">
 														<div class="col-md-12 form-area" style="margin-top:20px">
-															<div class="box-label">Bio Data </div>
+															<div class="box-label">Bio Data  </div>
 															<div class="row">
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Title</h6>
@@ -114,47 +116,49 @@ use yii\widgets\ActiveForm;
 								</div>
 							
 						
-								<div class="row" style="margin-top:20px">
-									
-											
-									
-										<div class="col-md-12 form-area" style="margin-top:20px">
-												
-												<div class="box-label">DOCUMENTS </div>
-												
-												
-												<div class="row">
-													<? foreach($rootModel->filenumber as $key => $value){ ?>
+									<div class="col-md-12 form-area" style="margin-top:20px">
+
+			<div class="box-label">FILES </div>
+
+
+			<div class="row">
+				<? foreach($rootModel->filenumber as $key => $value){ ?>
 														<div class="col-md-3">
 															
+																<? if($value->allocation == null){ ?>
+															<div style="width:200px" class="bg-danger">
+															<a href="<?= Url::to(['applicants/applicantfiledashboard','id' => $value->id])?>"> 
+																<?= Html::img('@web/'.'img/folderempty.png', ['alt' => 'My logo','class'=>'display_image2']) ?>
+															</a>
+															</div>
 															
-															<?= Html::img('@web/'.'uploads/passportplaceholder880628419658791.jpg', ['alt' => 'My logo','class'=>'display_image']) ?>
+														<? }else{
+															if($value->allocation->status == 1){ ?>
+																<div style="width:200px" class="bg-success">
+															<a href="<?= Url::to(['applicants/applicantfiledashboard','id' => $value->id])?>"> 
+																<?= Html::img('@web/'.'img/folderempty.png', ['alt' => 'My logo','class'=>'display_image2']) ?>
+															</a>
+															</div>
+															<? }else{?>
+																<div style="width:200px" class="bg-warning">
+															<a href="<?= Url::to(['applicants/applicantfiledashboard','id' => $value->id])?>"> 
+																<?= Html::img('@web/'.'img/folderempty.png', ['alt' => 'My logo','class'=>'display_image2']) ?>
+															</a>
+															</div>
+																
+															<?}
+															 
+														}?>
 															
 															<h4><?= $value->file_number; ?></h4>
 															
 														</div>
 													<?}?>
 													
-													
-													
-														
-														
-													</div>
-													
-													
-													
 
-												 
-											</div>
-									
-									
-										
-									
-										
-									
-									
-									
-								</div>
+			</div>
+
+		</div>
 							
 						</div>
 								<?}?>
@@ -191,8 +195,7 @@ use yii\widgets\ActiveForm;
 									</div>
 
 									<div class="col-md-6 " >
-										<h6 class="header-text-color">organization local government</h6>
-										<h5><?//= $modelBio->lga->name ?></h5>
+										
 									</div>
 
 								</div>
@@ -227,12 +230,33 @@ use yii\widgets\ActiveForm;
 
 			<div class="row">
 				<? foreach($rootModel->filenumber as $key => $value){ ?>
+													
+														
 														<div class="col-md-3">
-															
+															<? if($value->allocation == null){ ?>
+															<div style="width:200px" class="bg-danger">
 															<a href="<?= Url::to(['applicants/applicantfiledashboard','id' => $value->id])?>"> 
-																<?= Html::img('@web/'.'uploads/passportplaceholder880628419658791.jpg', ['alt' => 'My logo','class'=>'display_image']) ?>
+																<?= Html::img('@web/'.'img/folderempty.png', ['alt' => 'My logo','class'=>'display_image2']) ?>
 															</a>
+															</div>
 															
+														<? }else{
+															if($value->allocation->status == 1){ ?>
+																<div style="width:200px" class="bg-success">
+															<a href="<?= Url::to(['applicants/applicantfiledashboard','id' => $value->id])?>"> 
+																<?= Html::img('@web/'.'img/folderempty.png', ['alt' => 'My logo','class'=>'display_image2']) ?>
+															</a>
+															</div>
+															<? }else{?>
+																<div style="width:200px" class="bg-warning">
+															<a href="<?= Url::to(['applicants/applicantfiledashboard','id' => $value->id])?>"> 
+																<?= Html::img('@web/'.'img/folderempty.png', ['alt' => 'My logo','class'=>'display_image2']) ?>
+															</a>
+															</div>
+																
+															<?}
+															 
+														}?>
 															
 															<h4><?= $value->file_number; ?></h4>
 															

@@ -160,12 +160,12 @@ $titles =[
 												<div class="row">
 														<div class="col-md-6">
 															<div class="form-group">
-																<?= $form->field($model, 'amount_word')->textInput(['id' => 'amount_word']); ?>
+																<?= $form->field($model, 'amount_word')->hiddenInput(['value' =>'ten thousand naira only'])->label(false); ?>
 														    </div>
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
-																<?= $form->field($model, 'amount')->textInput(['id' => 'amount']); ?> 
+																<?= $form->field($model, 'amount')->hiddenInput(['value' => 10000])->label(false); ?> 
 														    </div>
 
 														</div>
@@ -183,7 +183,8 @@ $titles =[
 											<div class="row button-row">
 														
 														<div class="col-md-5">
-													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
+													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design', 'id' =>'actionbutton']) ?>
+													<?= Html::button('Wait Loading ..........', ['class' => 'btn btn-warning btn-lg  button-design','id' =>'loaders']) ?>
 												</div>
 												<div class="col-md-5">
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
@@ -214,6 +215,8 @@ $titles =[
 	
 	$('#paymentDetails').on('beforeSubmit', function (e) {
 	toastr.info('Proccessing Payment Data Please Wait')
+	$(document).find('#actionbutton').hide()
+	$(document).find('#loaders').show()
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 

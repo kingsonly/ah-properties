@@ -74,4 +74,9 @@ class KdmStaff extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'staff_user_id']);
     }
+	
+	public function getFullname()
+    {
+        return $this->lastname.' '.$this->firstname;
+    }
 }

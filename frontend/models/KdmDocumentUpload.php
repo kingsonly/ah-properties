@@ -60,7 +60,7 @@ class KdmDocumentUpload extends \yii\db\ActiveRecord
 			if(!empty($this->imageFile)){
 				$newRand = rand(1,1000000000001010);
 			
-				$filePath = 'uploads/' . $this->imageFile->baseName . $newRand.'.' . $this->imageFile->extension;
+				$filePath = 'uploads/' . preg_replace('/[^A-Za-z0-9\-]/', '',str_replace(' ','_',trim($this->imageFile->baseName))) . $newRand.'.' . $this->imageFile->extension;
 				$this->image_path  = $filePath;
 				$this->save();
 				$this->imageFile->saveAs($filePath);
@@ -75,4 +75,10 @@ class KdmDocumentUpload extends \yii\db\ActiveRecord
             return false;
         }
     }
+	
+	public function getRequestupdate(){
+
+		return $this->hasOne(KdmRequestUpdate::className(), ['table_id' => 'id'])->andWhere(['table_name' =>'kdm_document_upload'])->orderBy(['id' => SORT_DESC]);
+		//return $this->hasOne(KdmCities::className(), ['id' => 'city']);
+	}
 }

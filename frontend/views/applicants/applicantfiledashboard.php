@@ -16,7 +16,9 @@ use yii\widgets\ActiveForm;
 		margin-top: 30px;
 		margin-bottom: 10px;
 	}
+	
 </style>
+<? if (\Yii::$app->user->can('allocate')) { ?>
 <? if($rootModel->applicant_type == 1){ ?>			
 						
 						<div class="container ">
@@ -33,7 +35,7 @@ use yii\widgets\ActiveForm;
 												
 													<div class="row ">
 														<div class="col-md-12 form-area" style="margin-top:20px">
-															<div class="box-label">Bio Data </div>
+															<div class="box-label">Bio Data for file (<?= $model->file_number?>) </div>
 															<div class="row">
 																<div class="col-md-3 " >
 																	<h6 class="header-text-color">Title</h6>
@@ -136,7 +138,7 @@ use yii\widgets\ActiveForm;
 		<div class="col-md-12 ">
 			<div class="row ">
 				<div class="col-md-12 form-area" style="margin-top:20px">
-					<div class="box-label">Organization Details </div>
+					<div class="box-label">Organization Details for file (<?= $model->file_number?>) </div>
 
 					<div class="row">
 						<div class="col-md-12">
@@ -209,11 +211,11 @@ use yii\widgets\ActiveForm;
 							<li class="list-group-item " id="payments" >
 								<a class="nav-link header-text-color" href="#">Payments</a>
 							</li>
-							
-							<li class="list-group-item " id="payments" >
+							<? if (\Yii::$app->user->can('giveletter')) { ?>
+							<li class="list-group-item " id="letter" >
 								<a class="nav-link header-text-color" href="#">Offer Letter</a>
 							</li>
-							
+							<? } ?>
 							
 							</ul>
 						</div>
@@ -235,6 +237,7 @@ use yii\widgets\ActiveForm;
 	$spacebooking = Url::to(['applicants/spacebooking','id' => $model->id]);
 	$invoice = Url::to(['applicants/invoice','id' => $model->id]);
 	$payment = Url::to(['applicants/folderpayments','id' => $model->id]);
+	$folderLetters = Url::to(['applicants/folderletters','id' => $model->id]);
 	
 	$biodataform = <<<JS
 	$(document).find('#renderapplicationform').load('$spacebooking');
@@ -260,6 +263,13 @@ use yii\widgets\ActiveForm;
 	
 	})
 	
+	$("#letter").on("click", function() {
+		$(document).find('.list-group-item').removeClass('active')
+		$(this).addClass('active')
+		$(document).find('#renderapplicationform').load('$folderLetters');
+	
+	})
+	
 
 	
 	$("#customFile").on("change", function() {
@@ -272,3 +282,11 @@ JS;
  
 $this->registerJs($biodataform);
 ?>
+
+<? }else{ ?>
+								
+	<div style="width: 80%;
+margin: 0 auto;
+text-align: center;
+padding-top: 200px;"> Sorry you cant view the content of this page </div>
+<? } ?>

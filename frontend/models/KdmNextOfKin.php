@@ -37,11 +37,11 @@ class KdmNextOfKin extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['applicant_id', 'relationship', 'title', 'first_name', 'middle_name', 'last_name', 'mobile_number', 'street_name', 'district', 'city', 'state', 'country'], 'required'],
+            [['applicant_id', 'relationship', 'title', 'first_name', 'last_name', 'mobile_number', 'street_name', 'district', 'city', 'state', 'country'], 'required'],
             [['mobile_number'], 'integer'],
             [['relationship', 'first_name', 'middle_name', 'last_name', 'district', 'city', 'state', 'country','applicant_id'], 'string'],
-            [['title'], 'string', 'max' => 3],
-            [['status'], 'safe'],
+            [['title'], 'string', 'max' => 10],
+            [['status', 'middle_name'], 'safe'],
             [['street_name'], 'string', 'max' => 255],
         ];
     }
@@ -81,5 +81,10 @@ class KdmNextOfKin extends \yii\db\ActiveRecord
 	public function getLga(){
 
 		return $this->hasOne(KdmCities::className(), ['id' => 'city']);
+	}
+	public function getRequestupdate(){
+
+		return $this->hasOne(KdmRequestUpdate::className(), ['table_id' => 'id'])->andWhere(['table_name' =>'kdm_next_of_kin'])->orderBy(['id' => SORT_DESC]);
+		//return $this->hasOne(KdmCities::className(), ['id' => 'city']);
 	}
 }

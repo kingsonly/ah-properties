@@ -32,8 +32,9 @@ class KdmApplicantOrganizationContactPersonDetails extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['applicant_id', 'title', 'first_name', 'middle_name', 'last_name', 'phone_number', 'status','designation'], 'required'],
+            [['applicant_id', 'title', 'first_name', 'last_name', 'phone_number', 'status','designation'], 'required'],
             [['status'], 'integer'],
+            [['middle_name'], 'safe'],
             [['applicant_id'], 'string', 'max' => 255],
             [['title'], 'string', 'max' => 10],
             [['first_name', 'middle_name', 'last_name', 'phone_number'], 'string', 'max' => 50],

@@ -33,8 +33,7 @@ $verificationModel = new VerificationModel();
 													</div>
 
 													<div class="col-md-6 " >
-														<h6 class="header-text-color">organization local government</h6>
-														<h5><?= $model->lga->name ?></h5>
+														
 													</div>
 
 												</div>
@@ -53,9 +52,13 @@ $verificationModel = new VerificationModel();
 													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => '','id' => 'customCheck'])->label(false); ?>
 																	
 												</div>
-												<div class="col-md-11">
+												<div class="col-md-6">
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
+												</div>
+												
+												<div class="col-md-5">
+													<?= Html::button('Decline', ['class' => 'btn btn-danger button-border btn-lg button-design','id' =>'decline']) ?>
 												</div>
 												
 												
@@ -67,8 +70,13 @@ $verificationModel = new VerificationModel();
 <?
 	$verifyorgBiodata = Url::to(['applicants/proccessorgbioveri','id' => $model->applicant_id]);
 	$loadContactAddress = Url::to(['applicants/orgaddressverification']);
+	$declineUrl = Url::to(['applicants/decline','id' => $model->id,'section' => 'orgbiodata','applicant' => $model->applicant_id]);
 	
 	$createCustomerFormJs = <<<JS
+	
+	$('#decline').on('click',function(){
+		$(document).find('#renderapplicationform').load('$declineUrl');
+	})
 	
 		
 	$('#bioveri').on('beforeSubmit', function (e) {

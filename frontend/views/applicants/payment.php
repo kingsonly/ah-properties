@@ -235,9 +235,9 @@ use yii\widgets\ActiveForm;
 											<th>Date Of Payment</th>
 											<td></td>
 										</tr>
-										
-										<tr>
 										<? foreach($fileValue->payments as $key => $value){ ?>
+										<tr>
+										
 											<td><?= $value->receit_id; ?></td>
 											<td><?= $value->payment_for; ?></td>
 											<td><?= $value->payment_date; ?></td>
@@ -254,8 +254,9 @@ use yii\widgets\ActiveForm;
 											
 											</td>
 											
-										<? }?>
+										
 										</tr>
+										<? }?>
 									</table>
 								
 								</div>

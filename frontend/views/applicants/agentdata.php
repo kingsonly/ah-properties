@@ -125,61 +125,31 @@ $gender =[
 												<div class="box-label">Agent </div>
 												
 												
-												<div class="row">
-														<div class="col-md-6">
-															
-																<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel->id])->label(false); ?>
-																
-																<?= $form->field($model, 'agent_title')->dropDownList(ArrayHelper::map($titles, 'id', 'name'),['class'=>'custom-select']) ?>
-														    
-														</div>
-														<div class="col-md-6">
-															
-															<?= $form->field($model, 'agent_gender')->dropDownList(ArrayHelper::map($gender, 'id', 'name'),['class'=>'custom-select']) ?>
-														</div>
-													
-										
-														
-														
-													</div>
+											
 												
 													<div class="row">
-														<div class="col-md-6">
+														<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel->id])->label(false); ?>
+														<div class="col-md-4">
 															<?= $form->field($model, 'agent_first_name')->textInput(['id' => 'agent_first_name']); ?>
 
 																 
 														   
 														</div>
-														<div class="col-md-6">
-															
-																<?= $form->field($model, 'agent_last_name')->textInput(['id' => 'agent_last_name']); ?>
-														    
-
-														</div>
 														
-														
-													</div>
-												
-												
-												<div class="row">
-														<div class="col-md-6">
+														<div class="col-md-4">
 															
 																<?= $form->field($model, 'agent_mobile_number')->textInput(['id' => 'agent_mobile_number']); ?>
 														    
 														</div>
-														<div class="col-md-6">
+														<div class="col-md-4">
 															<?= $form->field($model, 'email_address')->textInput(['id' => 'email_address']); ?>
 
 														</div>
 													
-													
 														
 														
 													</div>
-													
-													
-													
-
+									
 												 
 											</div>
 												
@@ -187,7 +157,8 @@ $gender =[
 											<div class="row button-row">
 														
 														<div class="col-md-5">
-													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
+													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design', 'id' =>'actionbutton']) ?>
+													<?= Html::button('Wait Loading ..........', ['class' => 'btn btn-warning btn-lg  button-design','id' =>'loaders']) ?>
 												</div>
 												<div class="col-md-5">
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
@@ -216,6 +187,8 @@ $gender =[
 	
 	
 	$('#agentDetails').on('beforeSubmit', function (e) {
+	$(document).find('#actionbutton').hide()
+	$(document).find('#loaders').show()
 	toastr.info('Processing Agent Data Please Wait')
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);

@@ -283,7 +283,7 @@
 											
 											<div class="row">
 											<div class="col-md-1" style="font-size: 30px;">₦</div>
-											<div class="col-md-11 totalinput"><strong><?= $modelKdmPayment->amount; ?></strong></div>
+											<div class="col-md-11 totalinput"><strong><?= number_format($modelKdmPayment->amount); ?></strong></div>
 											</div>
 										
 										</div>
@@ -406,7 +406,7 @@
 											
 											<div class="row">
 											<div class="col-md-1" style="font-size: 30px;">₦</div>
-												<div class="col-md-11 totalinputcopy"><strong><?= $modelKdmPayment->amount; ?></strong></div>
+												<div class="col-md-11 totalinputcopy"><strong><?= number_format($modelKdmPayment->amount); ?></strong></div>
 											</div>
 										
 										</div>
@@ -536,7 +536,7 @@
 											
 											<div class="row">
 											<div class="col-md-1" style="font-size: 30px;">₦</div>
-												<div class="col-md-11 totalinputcopy2"><strong><?= $modelKdmPayment->amount; ?></strong></div>
+												<div class="col-md-11 totalinputcopy2"><strong><?= number_format($modelKdmPayment->amount); ?></strong></div>
 											</div>
 										
 										</div>

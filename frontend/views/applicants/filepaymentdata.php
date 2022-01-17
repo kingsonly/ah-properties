@@ -80,12 +80,13 @@ $titles =[
 												<div class="row">
 														<div class="col-md-6">
 															<div class="form-group">
-																<?= $form->field($model, 'amount_word')->textInput(['id' => 'amount_word']); ?>
+
+																<?= $form->field($model, 'amount')->textInput(['id' => 'amount']); ?> 
 														    </div>
 														</div>
 														<div class="col-md-6">
 															<div class="form-group">
-																<?= $form->field($model, 'amount')->textInput(['id' => 'amount']); ?> 
+																<?= $form->field($model, 'amount_word')->textInput(['id' => 'amount_word']); ?>
 														    </div>
 
 														</div>
@@ -103,7 +104,8 @@ $titles =[
 											<div class="row button-row">
 														
 														<div class="col-md-5">
-													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
+													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design', 'id' =>'actionbutton']) ?>
+													<?= Html::button('Wait Loading ..........', ['class' => 'btn btn-warning btn-lg  button-design','id' =>'loaders']) ?>
 												</div>
 												<div class="col-md-5">
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
@@ -134,6 +136,8 @@ $titles =[
 	
 	$('#paymentDetails').on('beforeSubmit', function (e) {
 	toastr.info('Proccessing Payment Data Please Wait')
+	$(document).find('#actionbutton').hide()
+	$(document).find('#loaders').show()
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 
@@ -149,8 +153,9 @@ $titles =[
         success: function (data) {
         	newData = data.data
 			if(data.status == 1){
-				alert(data.data);
+				
 				toastr.success('Payment  Saved')
+				$(document).find('#invoice').trigger('click');
 			}else{
 				alert('Please confirm your data to make sure values are correct')
 			}

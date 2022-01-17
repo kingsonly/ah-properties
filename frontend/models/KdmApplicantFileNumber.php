@@ -17,6 +17,8 @@ class KdmApplicantFileNumber extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+	public $paidStatus = 1;
+	public $paidPendingStatus = 0;
     public static function tableName()
     {
         return 'kdm_applicant_file_number';
@@ -49,6 +51,18 @@ class KdmApplicantFileNumber extends \yii\db\ActiveRecord
 	
 	public function getPayments(){
 		return $this->hasMany(KdmPayment::className(), ['file_number_id' => 'id']);
+	}
+	
+	public function getPaymentstatus(){
+		return $this->hasMany(KdmPayment::className(), ['file_number_id' => 'id'])->andWhere(['status'=> $this->paidPendingStatus]);
+	}
+	
+	public function getApplicantid(){
+		return $this->hasOne(KdmRootApplicant::className(), ['id' => 'applicant_id']);
+	}
+	
+	public function getAllocation(){
+		return $this->hasOne(KdmSpaceBooking::className(), ['file_id' => 'id']);
 	}
 	
 }

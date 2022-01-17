@@ -14,7 +14,7 @@
         height: 100%;
     }
     .welcome-banner {
-        background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7)), url(https://img.etimg.com/thumb/width-640,height-480,imgsize-106734,resizemode-1,msid-62552254/news/international/world-news/contract-signed-for-work-on-worlds-tallest-skyscraper-in-jeddah/skyscrapper.jpg);
+        background:  url(../img/KAFE_OVERVIEW.png);
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;

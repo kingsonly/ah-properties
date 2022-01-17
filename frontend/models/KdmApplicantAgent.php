@@ -33,11 +33,11 @@ class KdmApplicantAgent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['applicant_id', 'agent_title', 'agent_first_name', 'agent_last_name', 'agent_gender', 'agent_mobile_number', 'email_address'], 'required'],
+            [['applicant_id', 'agent_first_name',  'agent_mobile_number' ], 'required'],
             [[ 'agent_id', 'agent_mobile_number'], 'integer'],
-            [['agent_first_name', 'agent_last_name', 'agent_gender'], 'string'],
-            [['agent_title'], 'string', 'max' => 3],
-            [['status'], 'safe'],
+            [['agent_first_name'], 'string'],
+            [['agent_title'], 'string', 'max' => 10],
+            [['status','email_address'], 'safe'],
            
         ];
     }
@@ -52,7 +52,7 @@ class KdmApplicantAgent extends \yii\db\ActiveRecord
             'applicant_id' => 'Applicant ID',
             'agent_id' => 'Agent ID',
             'agent_title' => "Agent's Title",
-            'agent_first_name' => "Agent's First Name",
+            'agent_first_name' => "Agent's  Name",
             'agent_last_name' => "Agent's Last Name",
             'agent_gender' => "Agent's Gender",
             'agent_mobile_number' => "Agent's Mobile Number",
@@ -61,4 +61,10 @@ class KdmApplicantAgent extends \yii\db\ActiveRecord
             'status' => 'Staus',
         ];
     }
+	
+	public function getRequestupdate(){
+
+		return $this->hasOne(KdmRequestUpdate::className(), ['table_id' => 'id'])->andWhere(['table_name' =>'kdm_applicant_agent'])->orderBy(['id' => SORT_DESC]);
+		//return $this->hasOne(KdmCities::className(), ['id' => 'city']);
+	}
 }

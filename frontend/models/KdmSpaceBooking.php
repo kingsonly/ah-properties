@@ -31,7 +31,7 @@ class KdmSpaceBooking extends \yii\db\ActiveRecord
         return [
             [['file_id', 'user_id','shop_id', 'date_created'], 'required'],
             [['file_id', 'user_id'], 'integer'],
-            [['date_created'], 'safe'],
+            [['date_created','status','date_approved'], 'safe'],
         ];
     }
 
@@ -62,5 +62,13 @@ class KdmSpaceBooking extends \yii\db\ActiveRecord
 	public function getUser(){
 
 		return $this->hasOne(User::className(), ['id' => 'user_id']);
+	}
+	
+	public function getInvoice(){
+		return $this->hasOne(KdmInvoice::className(), ['shop_id' => 'shop_id']);
+	}
+	
+	public function getExemptedshops(){
+		return $this->hasOne(KdmExemptedShops::className(), ['shop_id' => 'shop_id']);
 	}
 }

@@ -38,7 +38,7 @@ class KdmPayment extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+     public function rules()
     {
         return [
             [['applicant_id',  'payment_mode', 'bank_branch', 'payment_date',  'teller_number', 'amount', 'amount_word','file_number_id','imageFile'], 'required'],
@@ -49,7 +49,7 @@ class KdmPayment extends \yii\db\ActiveRecord
             [['image'], 'string', 'max' => 200],
 			[['imageFile'], 'file', 'extensions' => 'png,jpg'],
 			[['document_id', 'imageFile','image_path'], 'safe'],
-			[['imageFile'], 'file', 'extensions' => 'png,jpg'],
+			
             [['bank_branch', 'amount_word', 'payment_for'], 'string', 'max' => 100],
         ];
     }
@@ -85,7 +85,7 @@ class KdmPayment extends \yii\db\ActiveRecord
 			if(!empty($this->imageFile)){
 				$newRand = rand(1,1000000000001010);
 			
-				$filePath = 'uploads/' . $this->imageFile->baseName . $newRand.'.' . $this->imageFile->extension;
+				$filePath = 'uploads/' . preg_replace('/[^A-Za-z0-9\-]/', '',str_replace(' ','_',trim($this->imageFile->baseName))) . $newRand.'.' . $this->imageFile->extension;
 				$this->image  = $filePath;
 				$this->save();
 				$this->imageFile->saveAs($filePath);
@@ -104,5 +104,11 @@ class KdmPayment extends \yii\db\ActiveRecord
 	public function getFilenumber(){
 
 		return $this->hasOne(KdmApplicantFileNumber::className(), ['id' => 'file_number_id']);
+	}
+	
+	public function getRequestupdate(){
+
+		return $this->hasOne(KdmRequestUpdate::className(), ['table_id' => 'id'])->andWhere(['table_name' =>'kdm_payment'])->orderBy(['id' => SORT_DESC]);
+		//return $this->hasOne(KdmCities::className(), ['id' => 'city']);
 	}
 }

@@ -231,7 +231,8 @@ foreach($dbState as $key => $value){
 			
 
 			<div class="col-md-5">
-				<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
+				<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design','id' =>'actionbutton']) ?>
+				<?= Html::button('Wait Loading ..........', ['class' => 'btn btn-warning btn-lg  button-design','id' =>'loaders']) ?>
 			</div>
 			<div class="col-md-5">
 				<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
@@ -257,6 +258,8 @@ foreach($dbState as $key => $value){
 	
 	$('#organization_contact').on('beforeSubmit', function (e) {
 	toastr.info('Proccessing  Data Please Wait')
+	$(document).find('#actionbutton').hide()
+	$(document).find('#loaders').show()
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 

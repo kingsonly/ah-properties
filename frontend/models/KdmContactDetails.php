@@ -73,4 +73,10 @@ class KdmContactDetails extends \yii\db\ActiveRecord
 
 		return $this->hasOne(KdmCities::className(), ['id' => 'city']);
 	}
+	
+	public function getRequestupdate(){
+
+		return $this->hasOne(KdmRequestUpdate::className(), ['table_id' => 'id'])->andWhere(['table_name' =>'kdm_contact_details'])->orderBy(['id' => SORT_DESC]);
+		//return $this->hasOne(KdmCities::className(), ['id' => 'city']);
+	}
 }

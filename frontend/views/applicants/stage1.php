@@ -142,7 +142,8 @@ $gender =[
 											<div class="row button-row">
 														
 														<div class="col-md-5">
-													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
+													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design', 'id' =>'actionbutton']) ?>
+													<?= Html::button('Wait Loading ..........', ['class' => 'btn btn-warning btn-lg  button-design','id' =>'loaders']) ?>
 												</div>
 												<div class="col-md-5">
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
@@ -249,6 +250,8 @@ $gender =[
 	
 	$('#stage1_form').on('beforeSubmit', function (e) {
 	toastr.info('Processing')
+	$(document).find('#actionbutton').hide()
+	$(document).find('#loaders').show()
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);
 		 
@@ -325,3 +328,5 @@ JS;
  
 $this->registerJs($biodataform);
 ?>
+
+

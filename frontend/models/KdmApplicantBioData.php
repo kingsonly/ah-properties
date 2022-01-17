@@ -44,10 +44,10 @@ class KdmApplicantBioData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['applicant_id', 'title',  'first_name', 'middle_name', 'last_name', 'gender', 'date_of_birth', 'occupation', 'nationality', 'state_of_origin', 'local_government_of_origin', 'marital_status', 'highest_education'], 'required'],
+            [['applicant_id', 'title',  'first_name',  'last_name', 'gender', 'date_of_birth', 'occupation', 'nationality', 'state_of_origin', 'local_government_of_origin', 'marital_status', 'highest_education','imageFile'], 'required'],
             [['stage_status', 'verification_status', 'status'], 'integer'],
             [['first_name', 'middle_name', 'last_name', 'gender', 'occupation', 'nationality', 'state_of_origin', 'local_government_of_origin', 'marital_status', 'highest_education','applicant_id'], 'string'],
-            [['date_of_birth','image','imageFile','user_id'], 'safe'],
+            [['date_of_birth','image','imageFile','user_id','middle_name'], 'safe'],
 			[['imageFile'], 'file', 'extensions' => 'png,jpg'],
             [['title'], 'string', 'max' => 10],
             [['image'], 'string', 'max' => 200],
@@ -87,8 +87,8 @@ class KdmApplicantBioData extends \yii\db\ActiveRecord
         if ($this->validate()) {
 			if(!empty($this->imageFile)){
 				$newRand = rand(1,1000000000001010);
-			
-				$filePath = 'uploads/' . $this->imageFile->baseName . $newRand.'.' . $this->imageFile->extension;
+				
+				$filePath = 'uploads/' . preg_replace('/[^A-Za-z0-9\-]/', '',str_replace(' ','_',trim($this->imageFile->baseName))) . $newRand.'.' . $this->imageFile->extension;
 				$this->image  = $filePath;
 				$this->save();
 				$this->imageFile->saveAs($filePath);
@@ -117,5 +117,25 @@ class KdmApplicantBioData extends \yii\db\ActiveRecord
 	public function getLga(){
 
 		return $this->hasOne(KdmCities::className(), ['id' => 'local_government_of_origin']);
+	}
+	
+	public function getContact(){
+
+		return $this->hasOne(KdmContactDetails::className(), ['applicant_id' => 'applicant_id']);
+	}
+	
+	public function getFullname(){
+		if(empty($this->middle_name)){
+			return $this->title.' '.$this->first_name.' '. $this->last_name;
+		}else{
+			return $this->title.' '.$this->first_name.' '. $this->middle_name.' '. $this->last_name;
+		}
+		
+	}
+	
+	public function getRequestupdate(){
+
+		return $this->hasOne(KdmRequestUpdate::className(), ['table_id' => 'id'])->andWhere(['table_name' =>'kdm_applicant_bio_data'])->orderBy(['id' => SORT_DESC]);;
+		//return $this->hasOne(KdmCities::className(), ['id' => 'city']);
 	}
 }

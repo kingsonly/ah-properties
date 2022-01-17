@@ -6,6 +6,8 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use frontend\models\AuthAssignment;
+use frontend\models\KdmStaff;
 
 /**
  * User model
@@ -53,7 +55,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
@@ -209,4 +211,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+	
+	public function getRole(){
+		return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
+	}
+	
+	public function getStaffdetails(){
+		return $this->hasOne(KdmStaff::className(), ['staff_user_id' => 'id']);
+	}
 }

@@ -28,16 +28,21 @@
 				
 				</div>
 				<div class="col-md-3">
-					Amount Due <br><?= $model->amount; ?>
+					Amount Due <br>₦  <?= number_format($model->amount);?>
+					
+					
 				</div>
 				
 				<div class="col-md-3">
-					Amount Paid <br><?= $model->sumpayment == null? 0 : $model->sumpayment; ?>
+					Amount Paid <br> ₦ <?= $model->sumpayment == null? 0 : number_format( $model->sumpayment); ?>
 				</div>
 				
 				<div class="col-md-3">
-					<? $sumpayment = $model->sumpayment == null? 0 : $model->sumpayment ?>
-					Balance <br><?= $model->amount - $sumpayment; ?>
+					<? $sumpayment = $model->sumpayment == null? 0 : $model->sumpayment;
+						$balance = $model->amount - $sumpayment;
+					?>
+					Balance <br> ₦ <?= number_format($balance); ?>
+					
 				</div>
 				
 				<div class="col-md-12 form-area" style="margin-top:20px">
@@ -85,7 +90,9 @@
 				</div>
 				
 				<div class="col-md-6 margin-top-for-shop-button">
+					<a href="<?= Url::to(['applicants/invoiceprint','id' => $model->id]); ?>"  target="_blank">
 					<?= Html::button('Print Invoice', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'proceed']) ?>
+					</a>
 				</div>
 									
 
@@ -113,6 +120,7 @@
 	</div>
 
 <?
+if($model != null){
 	$paymentUrl = Url::to(['applicants/filepaymentdata','id'=>$FileModel->id, 'invoice'=> $model->id]);
 	$biodataform = <<<JS
 	
@@ -130,5 +138,6 @@
 JS;
  
 $this->registerJs($biodataform);
+}
 ?>
 

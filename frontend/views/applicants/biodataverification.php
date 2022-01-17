@@ -113,11 +113,13 @@ $verificationModel = new VerificationModel();
 													<?= $form->field($verificationModel, "user_validate")->checkbox(['value' => '1', 'uncheckValue'=>'0', 'class' => 'customcheck','id' => 'customCheck'])->label(false); ?>
 																	
 												</div>
-												<div class="col-md-8">
+												<div class="col-md-6">
 													<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
 													<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
 												</div>
-												<div class="col-md-4"></div>
+												<div class="col-md-5">
+													<?= Html::button('Decline', ['class' => 'btn btn-danger button-border btn-lg button-design','id' =>'decline']) ?>
+												</div>
 												
 													</div>
 										<?php ActiveForm::end(); ?>
@@ -127,10 +129,13 @@ $verificationModel = new VerificationModel();
 <?
 	$verifyBiodata = Url::to(['applicants/proccessbioveri','id' => $model->applicant_id]);
 	$loadContact = Url::to(['applicants/contactdataverification']);
+	$declineUrl = Url::to(['applicants/decline','id' => $model->id,'section' => 'indbiodata','applicant' => $model->applicant_id]);
 	
 	$createCustomerFormJs = <<<JS
 	
-		
+	$('#decline').on('click',function(){
+		$(document).find('#renderapplicationform').load('$declineUrl');
+	})
 	$('#bioveri').on('beforeSubmit', function (e) {
 	toastr.info('Processing')
 	var \$form = $(this);

@@ -1,7 +1,9 @@
 body{
 	margin-bottom: 40px;
 }
-
+#loaders{
+	display: none;
+}
 .display_image{
 		width: 200px;
 		height: 300px;
@@ -47,6 +49,10 @@ body{
 			}
 			.active{
 				background-color: #1D90E2 !important;
+				
+			}
+			.active2 a{
+				background-color: rgba(0, 0, 0, 0.3) !important;
 				
 			}
 			.active a{

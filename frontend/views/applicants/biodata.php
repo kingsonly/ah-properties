@@ -72,8 +72,16 @@ $edu =[
 	'name' =>'Secondary',
 	],
 	[
-	'id' =>'Tertiary',
-	'name' =>'Tertiary',
+	'id' =>'BSC',
+	'name' =>'BSC',
+	],
+	[
+	'id' =>'Masters',
+	'name' =>'Masters',
+	],
+	[
+	'id' =>'PHD',
+	'name' =>'PHD',
 	],
 	
 ];
@@ -104,7 +112,7 @@ foreach($dbState as $key => $value){
 									<div class="col-md-4">
 										<div class="form-group" >
 											
-											<?= $form->field($model, 'title')->dropDownList(ArrayHelper::map($titles, 'id', 'name'),['class'=>'custom-select']) ?>
+											<?= $form->field($model, 'title')->dropDownList(ArrayHelper::map($titles, 'id', 'name'),['class'=>'custom-select', 'prompt'=>'- Select Title -']) ?>
 											<?= $form->field($model, 'applicant_id')->hiddenInput(['value' => $rootModel])->label(false); ?>
 										</div>
 									</div>
@@ -166,12 +174,12 @@ foreach($dbState as $key => $value){
 								<div class="row">
 									<div class="col-md-4">
 										
-											<?= $form->field($model, 'nationality')->dropDownList(ArrayHelper::map($country, 'id', 'name'),['class'=>'custom-select']) ?>
+											<?= $form->field($model, 'nationality')->dropDownList(ArrayHelper::map($country, 'id', 'name'),['class'=>'custom-select', 'prompt'=>'- Select Nationality -']) ?>
 										
 									</div>
                                     <div class="col-md-4">
                                     	
-											<?= $form->field($model, 'state_of_origin')->dropDownList(ArrayHelper::map($state, 'id', 'name'),['class'=>'custom-select','id' => 'state']) ?>
+											<?= $form->field($model, 'state_of_origin')->dropDownList(ArrayHelper::map($state, 'id', 'name'),['class'=>'custom-select','id' => 'state','prompt'=>'- Select State -']) ?>
 										
 									</div>
                                     
@@ -188,6 +196,7 @@ foreach($dbState as $key => $value){
 											 ]
 										 ]); ?>
 										
+										
 									</div>
 								  		
 										
@@ -198,12 +207,12 @@ foreach($dbState as $key => $value){
 								<div class="row">
 									<div class="col-md-4">
             						
-											<?= $form->field($model, 'marital_status')->dropDownList(ArrayHelper::map($marriage, 'id', 'name'),['class'=>'custom-select']) ?>
+											<?= $form->field($model, 'marital_status')->dropDownList(ArrayHelper::map($marriage, 'id', 'name'),['class'=>'custom-select','prompt'=>'- Select Marital Status -']) ?>
 										
 									</div>
                                     <div class="col-md-4">
                                    
-											<?= $form->field($model, 'highest_education')->dropDownList(ArrayHelper::map($edu, 'id', 'name'),['class'=>'custom-select']) ?>
+											<?= $form->field($model, 'highest_education')->dropDownList(ArrayHelper::map($edu, 'id', 'name'),['class'=>'custom-select','prompt'=>'- Select Highest Education -']) ?>
 										
 									</div>
 									<div class="col-md-4">
@@ -217,7 +226,8 @@ foreach($dbState as $key => $value){
 	
 								<div class="row">
 									<div class="col-md-5">
-										<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design']) ?>
+										<?= Html::submitButton('SAVE AND CONTINUE', ['class' => 'btn btn-primary btn-lg  button-design','id' =>'actionbutton']) ?>
+										<?= Html::button('Wait Loading ..........', ['class' => 'btn btn-warning btn-lg  button-design','id' =>'loaders']) ?>
 									</div>
 									<div class="col-md-5">
 										<?//= Html::button('GO BACK', ['class' => 'btn btn-default button-border btn-lg button-design','id' =>'test']) ?>
@@ -244,6 +254,8 @@ foreach($dbState as $key => $value){
 });
 	
 	$('#bio').on('beforeSubmit', function (e) {
+	$(document).find('#actionbutton').hide()
+	$(document).find('#loaders').show()
 	toastr.info('Processing biodata please wait')
 	var \$form = $(this);
 		var formData = new FormData(\$form[0]);

@@ -56,9 +56,16 @@ class RootModel extends Model
 				$kdmFileNumber = new KdmApplicantFileNumber();
 				$kdmFileNumber->applicant_id = $kdmRoot->id;
 				$kdmFileNumber->status = 0;
-				$kdmFileNumber->file_number = 'KDM/'.time().Yii::$app->user->identity->id;
-				$kdmFileNumber->save();
-				sleep(1);
+				//$kdmFileNumber->file_number = 'KDM/'.time().Yii::$app->user->identity->id;
+				if($kdmFileNumber->save(false)){
+					$kdmFileNumberNew = KdmApplicantFileNumber::find()->andWhere(['id' => $kdmFileNumber->id])->one();
+					
+					$kdmFileNumberNew->file_number = Config::convertFileNumber($kdmFileNumberNew->id);
+					$kdmFileNumberNew->save(false);
+					
+				}
+				
+				//sleep(1);
 			} 
 			$this->applicantId = $kdmRoot->id;
 			return $kdmRoot;
